@@ -6,20 +6,19 @@ from django.shortcuts import render, redirect
 from functions.email_senders import forgot_pass_email
 
 #login
-def user_login(request, email, password):
-    try:
+def user_login(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
         user = authenticate(request, username=email, password=password)
         if user is not None:
-                login(request, user)
-                return redirect("dashboard")  # redirect to your main page
+            login(request, user)
+            return redirect("dashboard", id=user.id)  # pass the user ID
         else:
-                messages.error(request, "Invalid credentials!")
+            messages.error(request, "Invalid credentials!")
 
-        return messages.error(request, 'Something went wrong')
-    except Exception as e:
-          print(f"Login Error: {e}")
-          messages.error(request, 'Something went wrong, please try again later!')
-          return render(request, "clients/login.html")
+    return render(request, "clients/login.html")
 
 #sign up
 def user_signup(request, first_name, last_name, email, phone_number, password, confirm_password):

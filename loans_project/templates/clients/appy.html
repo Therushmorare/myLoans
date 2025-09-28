@@ -209,8 +209,12 @@
                         <div class="progress mb-4">
                             <div class="progress-bar bg-danger" role="progressbar" style="width: 33%;" id="progressBar"></div>
                         </div>
-                        <form id="applicationForm" enctype="multipart/form-data" novalidate>
+                        <form id="applicationForm" enctype="multipart/form-data" novalidate action="{% url 'processApplication' id=client.id %}">
                             {% csrf_token %}
+                            <input type="hidden" name="package" value="{{package_name}}">
+                            <input type="hidden" name="term" value="{{term}}">
+                            <input type="hidden" name="interest" value="{{interest}}">
+                            <input type="hidden" name="duration" value="{{duration}}">
                             <!-- Step 1: Financing Requested -->
                             <div class="step active">
                                 <div class="form-floating mb-3">

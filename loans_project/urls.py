@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from views.auth_view import signup_view, login_view, logout_view
-from views.client_views import client_dashboard, loan_type, apply_for_loan
+from views.auth_view import signup_view, login_view, logout_view, forgot_pass_view
+from views.client_views import client_dashboard, loan_type, apply_for_loan, processApplication
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,9 +26,13 @@ urlpatterns = [
     path('signup/', signup_view, name='signup'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
-    path('dashboard/<str:id>/', client_dashboard, name='dashboard'),
-    path('selectLoanType/<str:id>', loan_type, name='selectLoanType'),
-    path('apply/<str:id>', apply_for_loan, name='apply')
+    path('forgot/', forgot_pass_view, name='forgot'),
+
+    # Use UUID converter for user/client IDs
+    path('dashboard/<uuid:id>/', client_dashboard, name='dashboard'),
+    path('selectLoanType/<uuid:id>/', loan_type, name='selectLoanType'),
+    path('apply/<uuid:id>/', apply_for_loan, name='apply'),
+    path('processApplication/<uuid:id>/', processApplication, name='processApplication'),
 ]
 
 if settings.DEBUG:

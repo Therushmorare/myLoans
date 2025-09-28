@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
 from loans_project.models.client import Client
-from loans_project.core.clients import auth
-from loans_project.core.functions import loan_packages
+from core.clients import auth, loan_apply
+from core.functions import loan_packages
 
 # Dashboard
 @login_required(login_url='/login/')  # Redirect to login if not signed in
@@ -51,11 +51,12 @@ def apply_for_loan(request, id):
 def processApplication(request, id):
     client = get_object_or_404(Client, id=id)
 
-    if client:
-        return client
-    
     if request.method == "POST":
-        user_id = id
+        # form fields
+        package = request.POST.get("package_name")
+        loan_term = request.POST.get("term")
+        interest = request.POST.get("interest")
+        duration = request.POST.get("duration")
         amount = request.POST.get("amount")
         date = request.POST.get("date")
         reason = request.POST.get("reason")
@@ -72,7 +73,48 @@ def processApplication(request, id):
         company = request.POST.get("company")
         position = request.POST.get("position")
         salary = request.POST.get("salary")
-        id_document = request.FILES["ID_file"]
-        proof_of_income = request.FILES["proof_of_income"]
-        proof_of_res = request.FILES["proof_of_res"]
-        employment = request.FILES["employment_doc"]
+
+        # file uploads
+        id_document = request.FILES.get("ID_file")
+        proof_of_income = request.FILES.get("proof_of_income")
+        proof_of_res = request.FILES.get("proof_of_res")
+        employment = request.FILES.get("employment_doc")
+
+        # process loan
+        loan = loan_apply.process_loan_application(
+            user=request.user,
+            package=package,
+            loan_term=loan_term,
+            interest=interest,
+            duration=duration,
+            amount=amount,
+            date=date,
+            reason=reason,
+            first_name=first_name,
+            last_name=last_name,
+            citizen=citizen,
+            id_number=id_number,
+            email=email,
+            phone=phone,
+            address=address,
+            postal_code=postal_code,
+            city=city,
+            province=province,
+            company=company,
+            position=position,
+            salary=salary,
+            id_document=id_document,
+            proof_of_income=proof_of_income,
+            proof_of_res=proof_of_res,
+            employment=employment
+        )
+
+        if loan:
+            messages.success(request, f"Loan {loan.loan_id} processed with status {loan.status}")
+            return redirect("dashboard")
+        else:
+            messages.error(request, "Failed to process loan.")
+            return redirect("apply_loan")
+
+    # if GET request, maybe render the application form
+    return render(request, "clients/apply_loan.html", {"client": client})
