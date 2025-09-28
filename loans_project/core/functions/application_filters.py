@@ -1,4 +1,4 @@
-from functions.calculate_monthly_repayment import *
+from loans_project.core.functions.calculate_monthly_repayment import *
 
 def filter_loan_application(duration_in_months, amount, annual_interest, citizen, monthly_salary):
     try:

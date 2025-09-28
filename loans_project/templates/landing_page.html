@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get better credit deals with Nexus Financing">
+    <title>Nexus Financing</title>
+
+    <!-- Bootstrap & Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lobster|Poppins:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- AOS & Swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(120deg, #dc3545, #e4606d);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-weight: 700;
+            font-size: 3rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+        }
+
+        .hero .btn-cta {
+            padding: 0.75rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Animated Shapes */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape1 { width: 200px; height: 200px; background: #ff7b7b; top: -50px; left: -50px; }
+        .shape2 { width: 300px; height: 300px; background: #ff4f5c; bottom: -100px; right: -100px; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg);}
+            50% { transform: translateY(-20px) rotate(15deg);}
+        }
+
+        /* Features */
+        .feature-card {
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Loan Cards */
+        .loan-card {
+            border: none;
+            border-radius: 2rem;
+            transition: all 0.4s ease;
+        }
+
+        .loan-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(120deg, #dc3545, #e4606d);
+            color: white;
+            text-align: center;
+            padding: 5rem 0;
+        }
+
+        .cta-section .btn {
+            padding: 0.75rem 3rem;
+            font-size: 1.25rem;
+        }
+
+        /* Section Dividers */
+        .divider {
+            position: relative;
+        }
+
+        .divider::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            background: white;
+            border-radius: 50% 50% 0 0;
+            bottom: -50px;
+            left: 0;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <section class="hero text-center py-5 position-relative">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="container position-relative" data-aos="fade-down">
+            <h1>Fast, Easy, Reliable Loans</h1>
+            <p class="mb-4">Get approved within minutes and manage your finances with confidence.</p>
+            <a href="{% url 'loan_applications' %}" class="btn btn-light btn-cta rounded-pill fw-bold">Apply Now</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5" data-aos="fade-up">Why Choose Us</h2>
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="p-4 feature-card shadow-sm rounded-4 text-center h-100">
+                        <i class="fas fa-clock fa-3x mb-3 text-danger"></i>
+                        <h5 class="fw-bold">Quick Approvals</h5>
+                        <p>Streamlined process ensures your loan is approved in no time.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="p-4 feature-card shadow-sm rounded-4 text-center h-100">
+                        <i class="fas fa-shield-alt fa-3x mb-3 text-danger"></i>
+                        <h5 class="fw-bold">Secure & Reliable</h5>
+                        <p>Your data and finances are safe with our secure system.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="p-4 feature-card shadow-sm rounded-4 text-center h-100">
+                        <i class="fas fa-hand-holding-usd fa-3x mb-3 text-danger"></i>
+                        <h5 class="fw-bold">Flexible Plans</h5>
+                        <p>Choose loan terms and amounts that fit your lifestyle.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loan Packages Section -->
+    <section class="py-5 bg-light divider">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5" data-aos="fade-up">Our Loan Packages</h2>
+            <div class="row g-4">
+                {% for name, details in packages.items %}
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+                    <div class="card loan-card h-100 shadow-sm p-4 bg-white">
+                        <h3 class="fw-bold">{{ name }}</h3>
+                        <p>{{ details.1 }}</p>
+                        <ul class="list-unstyled mb-3">
+                            <li><strong>Term:</strong> {{ details.0 }}</li>
+                            <li><strong>Interest:</strong> {{ details.2 }}%</li>
+                            <li><strong>Duration:</strong> {{ details.3 }} days</li>
+                            <li><strong>Max Amount:</strong> {{ details.4 }}</li>
+                        </ul>
+                        <a href="{% url 'loan_applications' %}" class="btn btn-danger rounded-pill w-100">Apply</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" data-aos="fade-up">
+        <div class="container">
+            <h2 class="fw-bold mb-3">Ready to Get Started?</h2>
+            <p class="mb-4">Sign up and apply for your loan today.</p>
+            <a href="{% url 'signup' %}" class="btn btn-light rounded-pill fw-bold">Sign Up</a>
+        </div>
+    </section>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            duration: 1000,
+            easing: 'ease-in-out',
+        });
+    </script>
+</body>
+
+</html>

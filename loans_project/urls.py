@@ -17,12 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from views.auth_view import signup_view, login_view, logout_view, forgot_pass_view
-from views.client_views import *
+from loans_project.views.auth_view import signup_view, login_view, logout_view, forgot_pass_view
+from loans_project.views.client_views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('', landing_page, name='home'),
     path('signup/', signup_view, name='signup'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),

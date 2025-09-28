@@ -8,11 +8,18 @@ from loans_project.models.client import Client
 from loans_project.models.loans import Loan
 from loans_project.models.interest import Interest
 from loans_project.models.repayments import Repayment
-from core.clients import auth, loan_apply
-from core.functions import loan_packages
-from core.functions import interest
+from loans_project.core.clients import auth, loan_apply
+from loans_project.core.functions.finance_packages import loan_packages
+from loans_project.core.functions import interest
 from django.db.models import Sum
 import django_rq #Replace with celery on big apps
+
+#landing page
+def landing_page(request):
+    context = {
+        "packages": loan_packages
+    }
+    return render(request, "landing_page.html", context=context)
 
 # Dashboard
 @login_required(login_url='/login/')

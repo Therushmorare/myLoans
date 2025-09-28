@@ -1,9 +1,9 @@
-from models.client import Client
+from loans_project.models.client import Client
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from functions.email_senders import forgot_pass_email
+from loans_project.core.functions.email_senders import forgot_pass_email
 
 #login
 def user_login(request):

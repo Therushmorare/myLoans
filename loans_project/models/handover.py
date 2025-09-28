@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from models.loans import Loan
+from .loans import Loan
 import uuid
 
 User = get_user_model()

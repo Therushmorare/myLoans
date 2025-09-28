@@ -1,6 +1,6 @@
 from decimal import Decimal
-from models.loans import Loan
-from functions.application_filters import filter_loan_application
+from loans_project.models.loans import Loan
+from loans_project.core.functions.application_filters import filter_loan_application
 import uuid
 
 def process_loan_application(

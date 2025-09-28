@@ -1,4 +1,4 @@
-from models.uploaded_files import Document
+from loans_project.models.uploaded_files import Document
 import os
 from django.conf import settings
 from django.contrib.auth import get_user_model

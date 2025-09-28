@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from models.client import Client
-from core.clients import auth
+from loans_project.models.client import Client
+from loans_project.core.clients import auth
 
 def signup_view(request):
     if request.method == "POST":

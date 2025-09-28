@@ -1,7 +1,7 @@
-from models.loans import Loan
-from models.repayments import Repayment
-from models.interest import Interest
-from models.handover import Handover
+from loans_project.models.loans import Loan
+from loans_project.models.repayments import Repayment
+from loans_project.models.interest import Interest
+from loans_project.models.handover import Handover
 from datetime import datetime, timedelta
 from decimal import Decimal
 from django.utils.timezone import now
