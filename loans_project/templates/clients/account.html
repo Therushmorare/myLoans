@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Nexus Finance | Loans</title>
+    <title>Nexus Finance | My Account</title>
 
     <!-- Custom fonts for this template-->
     <link href="/loans_project/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -20,6 +20,7 @@
 
     <!-- Custom styles for this template-->
     <link href="/loans_project/static/styles/dashboard.css" rel="stylesheet">
+    <link href="/loans_project/static/styles/loan_form.css" rel="stylesheet">
 
 </head>
 
@@ -44,7 +45,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{% url 'dashboard' %}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -59,30 +60,23 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="#" aria-expanded="true">
+                <a class="nav-link" href="{% url 'loan_applications' %}" aria-expanded="true">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Applications</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#" aria-expanded="true">
+                <a class="nav-link" href="{% url 'account' %}" aria-expanded="true">
                     <i class="fas fa-fw fa-wallet"></i>
                     <span>Account</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#" aria-expanded="true">
+                <a class="nav-link" href="{% url 'portfolio' %}" aria-expanded="true">
                     <i class="fas fa-fw fa-chart-line"></i>
                     <span>Portfolio</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'payments' %}" aria-expanded="true">
-                    <i class="fas fa-fw fa-chart-wallet"></i>
-                    <span>Payments</span>
                 </a>
             </li>
 
@@ -164,14 +158,14 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{user.first_name}}&nbsp;{{user.last_name}}</span>
-                                <!--<img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">-->
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <img class="img-profile rounded-circle"
+                                    src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{% url 'account' %}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -184,7 +178,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{% url 'logout' %}" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -202,40 +196,77 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
+                        <a href="{% url 'selectLoanType' %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
                                 class="fas fa-file fa-sm text-white-50"></i>&nbsp;Apply For Loan</a>
                     </div>
 
                     <!-- Content Row -->
-                    <div class="row">
-                        {% for name, details in packages.items %}
-                        <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card p-4 mb-4 shadow-sm border-0 h-100 package-card">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h4 class="fw-bold text-danger">{{ name }}</h4>
-                                    <span class="badge bg-danger">Term: {{ details.0 }}</span>
-                                </div>
-                                <p class="text-muted mb-3">{{ details.1 }}</p>
-                                
-                                <ul class="list-unstyled mb-3">
-                                    <li><strong>Interest:</strong> <span class="text-danger">{{ details.2 }}%</span></li>
-                                    <li><strong>Duration:</strong> {{ details.3 }} days</li>
-                                    <li><strong>Max Amount:</strong> {{ details.4 }}</li>
-                                </ul>
-                                
-                                <form method="POST" action="{% url 'apply' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="package" value="{{name}}">
-                                    <input type="hidden" name="term" value="{{details.0}}">
-                                    <input type="hidden" name="description" value="{{details.1}}">
-                                    <input type="hidden" name="interest" value="{{details.2}}">
-                                    <input type="hidden" name="duration" value="{{details.3}}">
-                                    <button type="submit" class="btn btn-danger w-100">Apply</button>
-                                </form>
+                    <div class="row justify-content-center">
+                    <div class="container mt-5">
+                        <div class="card shadow-lg p-4" style="max-width: 700px; margin:auto; border-radius: 20px;">
+                            <div class="text-center mb-4">
+                                <h3 class="fw-bold text-danger">{{ user.first_name }} {{ user.last_name }}</h3>
+                                <p class="text-muted">Profile Overview</p>
+                                {% if user.is_verified %}
+                                    <span class="badge bg-success">Verified</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Unverified</span>
+                                {% endif %}
+                                {% if user.is_active %}
+                                    <span class="badge bg-primary">Active</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactive</span>
+                                {% endif %}
                             </div>
-                        </div>
-                        {% endfor %}
 
+                            <form>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="firstName" placeholder="First Name" value="{{ user.first_name }}" readonly>
+                                            <label for="firstName">First Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="{{ user.last_name }}" readonly>
+                                            <label for="lastName">Last Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="email" class="form-control" id="email" placeholder="Email" value="{{ user.email }}" readonly>
+                                            <label for="email">Email</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="tel" class="form-control" id="phone" placeholder="Phone Number" value="{{ user.phone_number|default:'' }}" readonly>
+                                            <label for="phone">Phone Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="username" placeholder="Username" value="{{ user.username }}" readonly>
+                                            <label for="username">Username</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="dateJoined" placeholder="Date Joined" value="{{ user.date_joined|date:'M d, Y H:i' }}" readonly>
+                                            <label for="dateJoined">Date Joined</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="lastLogin" placeholder="Last Login" value="{{ user.last_login|date:'M d, Y H:i' }}" readonly>
+                                            <label for="lastLogin">Last Login</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     </div>
                     <!-- Content Row -->
                 </div>
@@ -279,7 +310,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
                 </div>
             </div>
         </div>
@@ -302,6 +333,7 @@
     <script src="/loans_project/static/js/demo/chart-area-demo.js"></script>
     <script src="/loans_project/static/js/demo/chart-pie-demo.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

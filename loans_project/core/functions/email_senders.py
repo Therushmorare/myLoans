@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
 import threading
+from datetime import datetime
 
 #forgot password email
 def forgot_pass_email(subject, name, email, password):
@@ -11,9 +12,8 @@ def forgot_pass_email(subject, name, email, password):
         # Render HTML template
         html_content = render_to_string(
             "email_templates/forgot_password.html",
-            {"user_name": name, "password": password}
+            {"user_name": name, "password": password, "current_year": datetime.now().year}
         )
-
         # Plain text fallback
         text_content = f"Hello {name}, we noticed you forgot your password. Password: {password}!"
 
