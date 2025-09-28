@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible"content="IE=edge"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get better credit deals with nexus financing">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.1.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="/loans_project/static/styles/signup.css">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href=""><!-- add domain-->
+    <link rel="icon" type="image/png" href="">
+    <title>Nexus Financing | Signup</title>
+</head>
+
+<body>
+<div class="card">
+    <h3 class="text-center mb-4 fw-bold text-danger">Sign Up</h3>
+
+    <!-- Progress Bar -->
+    <div class="progress mb-4">
+        <div class="progress-bar bg-danger" role="progressbar" style="width: 33%;" id="progressBar"></div>
+    </div>
+
+    <form id="signupForm" novalidate autocomplete="off">
+    {% csrf_token %}
+        <!-- Step 1 -->
+        <div class="step active">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                <label for="firstName">First Name</label>
+                <div class="invalid-feedback">Please enter your first name.</div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                <label for="lastName">Last Name</label>
+                <div class="invalid-feedback">Please enter your last name.</div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-danger" onclick="nextStep()">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+                <label for="email">Email</label>
+                <div class="invalid-feedback">Please enter a valid email.</div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="tel" class="form-control" id="phone" placeholder="Phone Number" required>
+                <label for="phone">Phone Number</label>
+                <div class="invalid-feedback">Please enter your phone number.</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                <button type="button" class="btn btn-danger" onclick="nextStep()">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step">
+            <div class="form-floating mb-3 position-relative">
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <label for="password">Password</label>
+                <span class="position-absolute top-50 end-0 translate-middle-y pe-3 toggle-password" onclick="togglePassword('password')">
+                    <i class="bi bi-eye-fill"></i>
+                </span>
+                <div class="invalid-feedback">Please enter a password.</div>
+            </div>
+            <div class="form-floating mb-3 position-relative">
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                <label for="confirmPassword">Confirm Password</label>
+                <span class="position-absolute top-50 end-0 translate-middle-y pe-3 toggle-password" onclick="togglePassword('confirmPassword')">
+                    <i class="bi bi-eye-fill"></i>
+                </span>
+                <div class="invalid-feedback">Passwords do not match.</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                <button type="submit" class="btn btn-danger">Submit</button>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+        <span>Already have an account? </span>
+        <a href="{{ url_for('signInPage') }}" class="fw-bold text-danger">Login</a>
+        </div>
+    </form>
+</div>
+
+<script>
+let currentStep = 0;
+const steps = document.querySelectorAll(".step");
+const progressBar = document.getElementById("progressBar");
+const form = document.getElementById("signupForm");
+
+function showStep(index) {
+    steps.forEach((step, i) => step.classList.toggle("active", i === index));
+    progressBar.style.width = ((index + 1) / steps.length) * 100 + "%";
+}
+
+function nextStep() {
+    if (!validateStep()) return;
+    currentStep++;
+    if (currentStep >= steps.length) currentStep = steps.length - 1;
+    showStep(currentStep);
+}
+
+function prevStep() {
+    currentStep--;
+    if (currentStep < 0) currentStep = 0;
+    showStep(currentStep);
+}
+
+function validateStep() {
+    const stepInputs = steps[currentStep].querySelectorAll("input");
+    let valid = true;
+    stepInputs.forEach(input => {
+        if (!input.checkValidity()) {
+            input.classList.add("is-invalid");
+            valid = false;
+        } else {
+            input.classList.remove("is-invalid");
+        }
+    });
+    // Password match check on last step
+    if (currentStep === steps.length - 1) {
+        const pwd = document.getElementById("password");
+        const confirmPwd = document.getElementById("confirmPassword");
+        if (pwd.value !== confirmPwd.value) {
+            confirmPwd.classList.add("is-invalid");
+            valid = false;
+        } else {
+            confirmPwd.classList.remove("is-invalid");
+        }
+    }
+    return valid;
+}
+
+// Toggle password visibility
+function togglePassword(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+
+// Form submission
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if (!validateStep()) return;
+    alert("Sign Up Successful!");
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
