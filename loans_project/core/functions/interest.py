@@ -7,7 +7,19 @@ from decimal import Decimal
 from django.utils.timezone import now
 
 #this will be used as a background job
+def interest_checker_job(user_id):
+    try:
+        # safer to use client_id if it's a FK to User
+        loans = Loan.objects.filter(user_id=user_id)
 
+        for loan in loans:
+            calculate_interest(loan.loan_id)  # or loan.id depending on your calc function
+
+        return True
+    except Exception as e:
+        print(f"Could not calculate loan interest: {e}")
+        return False
+    
 def calculate_interest(loan_id):
     try:
         loan = Loan.objects.filter(loan_id=loan_id).first()

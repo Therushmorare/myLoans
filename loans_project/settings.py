@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'loans_project',  # project as app
+    'django_rq'
 ]
 
 # Tell Django to use our custom user model
@@ -104,6 +105,22 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "rediss://default:AVNS_esIuIYmXArZAUTi8cI_@valkey-1c1f95f-tshego-e191.g.aivencloud.com:15754",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+RQ_QUEUES = {
+    'default': {
+        'URL': os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

@@ -69,13 +69,13 @@
 
             <!-- Forgot Password -->
             <div class="text-center mb-2">
-                <a href="{{url_for('forgotPassword', table='User')}}">Forgot Password?</a>
+                <a href="{% url 'forgot' %}">Forgot Password?</a>
             </div>
 
             <!-- Sign Up Link -->
             <div class="text-center">
                 <span>Don't have an account?</span>
-                <a href="{{url_for('signUpPage')}}">Sign Up</a>
+                <a href="{% url 'signup' %}">Sign Up</a>
             </div>
         </form>
     </div>

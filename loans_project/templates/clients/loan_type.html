@@ -80,11 +80,18 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'payments' %}" aria-expanded="true">
+                    <i class="fas fa-fw fa-chart-wallet"></i>
+                    <span>Payments</span>
+                </a>
+            </li>
+
+            <!--<li class="nav-item">
                 <a class="nav-link" href="#" aria-expanded="true">
                     <i class="fas fa-fw fa-envelope"></i>
                     <span>Messages</span>
                 </a>
-            </li>
+            </li>-->
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -216,7 +223,7 @@
                                     <li><strong>Max Amount:</strong> {{ details.4 }}</li>
                                 </ul>
                                 
-                                <form method="POST" action="{% url 'apply' id=client.id %}">
+                                <form method="POST" action="{% url 'apply' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="package" value="{{name}}">
                                     <input type="hidden" name="term" value="{{details.0}}">

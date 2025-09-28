@@ -46,12 +46,12 @@
         <!-- Step 1 -->
         <div class="step active">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                <input type="text" class="form-control" name="first_name" id="firstName" placeholder="First Name" required>
                 <label for="firstName">First Name</label>
                 <div class="invalid-feedback">Please enter your first name.</div>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                <input type="text" class="form-control" name="last_name" id="lastName" placeholder="Last Name" required>
                 <label for="lastName">Last Name</label>
                 <div class="invalid-feedback">Please enter your last name.</div>
             </div>
@@ -63,12 +63,12 @@
         <!-- Step 2 -->
         <div class="step">
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" placeholder="Email" required>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
                 <label for="email">Email</label>
                 <div class="invalid-feedback">Please enter a valid email.</div>
             </div>
             <div class="form-floating mb-3">
-                <input type="tel" class="form-control" id="phone" placeholder="Phone Number" required>
+                <input type="tel" class="form-control" name="phone_number" id="phone" placeholder="Phone Number" required>
                 <label for="phone">Phone Number</label>
                 <div class="invalid-feedback">Please enter your phone number.</div>
             </div>
@@ -81,7 +81,7 @@
         <!-- Step 3 -->
         <div class="step">
             <div class="form-floating mb-3 position-relative">
-                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
                 <label for="password">Password</label>
                 <span class="position-absolute top-50 end-0 translate-middle-y pe-3 toggle-password" onclick="togglePassword('password')">
                     <i class="bi bi-eye-fill"></i>
@@ -89,7 +89,7 @@
                 <div class="invalid-feedback">Please enter a password.</div>
             </div>
             <div class="form-floating mb-3 position-relative">
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                <input type="password" class="form-control" name="confirm_password" id="confirmPassword" placeholder="Confirm Password" required>
                 <label for="confirmPassword">Confirm Password</label>
                 <span class="position-absolute top-50 end-0 translate-middle-y pe-3 toggle-password" onclick="togglePassword('confirmPassword')">
                     <i class="bi bi-eye-fill"></i>
@@ -103,7 +103,7 @@
         </div>
         <div class="text-center mt-3">
         <span>Already have an account? </span>
-        <a href="{{ url_for('signInPage') }}" class="fw-bold text-danger">Login</a>
+        <a href="{% url 'login' %}" class="fw-bold text-danger">Login</a>
         </div>
     </form>
 </div>

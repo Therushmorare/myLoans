@@ -15,10 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from views.auth_view import signup_view, login_view, logout_view, forgot_pass_view
-from views.client_views import client_dashboard, loan_type, apply_for_loan, processApplication
+from views.client_views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -29,10 +29,16 @@ urlpatterns = [
     path('forgot/', forgot_pass_view, name='forgot'),
 
     # Use UUID converter for user/client IDs
-    path('dashboard/<uuid:id>/', client_dashboard, name='dashboard'),
-    path('selectLoanType/<uuid:id>/', loan_type, name='selectLoanType'),
-    path('apply/<uuid:id>/', apply_for_loan, name='apply'),
-    path('processApplication/<uuid:id>/', processApplication, name='processApplication'),
+    path('dashboard/', client_dashboard, name='dashboard'),
+    path('select-loan-type/', loan_type, name='selectLoanType'),
+    path('apply/', apply_for_loan, name='apply'),
+    path('process-application/', processApplication, name='processApplication'),
+    path('my-loans/', loan_applications, name='loan_applications'),
+    path('my-account/', account, name='account'),
+    path('my-portfolio/', portfolio, name='portfolio'),
+    path('my-payments/', payments, name='payments'),
+    path('submit-payment/<uuid:loan_id>/', submit_payment, name='submit_payment'),
+    path('django-rq/', include('django_rq.urls'))
 ]
 
 if settings.DEBUG:

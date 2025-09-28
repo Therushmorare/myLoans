@@ -45,13 +45,13 @@
 
         <!-- Submit Button -->
         <div class="d-grid mb-3">
-            <button type="submit" class="btn btn-danger">Send Reset Link</button>
+            <button type="submit" class="btn btn-danger">Continue</button>
         </div>
 
         <!-- Back to Login -->
         <div class="text-center">
             <span>Remembered your password? </span>
-            <a href="{{ url_for('signInPage') }}" class="fw-bold text-danger">Login</a>
+            <a href="{% url 'login' %}" class="fw-bold text-danger">Login</a>
         </div>
 
         <!-- Success Alert (hidden by default) -->
