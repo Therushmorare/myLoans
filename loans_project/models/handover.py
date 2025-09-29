@@ -18,6 +18,7 @@ class Handover(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="loans")
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE, related_name="handovers")
     escalated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="escalations")
     stage = models.CharField(max_length=20, choices=ESCALATION_STAGE_CHOICES, default="COLLECTION")

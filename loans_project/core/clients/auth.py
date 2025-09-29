@@ -6,10 +6,8 @@ from django.shortcuts import render, redirect
 from loans_project.core.functions.email_senders import forgot_pass_email
 
 #login
-def user_login(request):
+def user_login(request, email, password):
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
 
         user = authenticate(request, username=email, password=password)
         if user is not None:

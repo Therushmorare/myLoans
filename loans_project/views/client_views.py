@@ -32,7 +32,7 @@ def client_dashboard(request):
     total_loans = Loan.objects.filter(user=request.user, status='APPROVED') \
                               .aggregate(total=Sum('amount'))['total'] or 0
 
-    total_paid = Repayment.objects.filter(user=request.user, status='SUCCESS') \
+    total_paid = Repayment.objects.filter(loan__client=request.user, status='SUCCESS') \
                                   .aggregate(total=Sum('amount'))['total'] or 0
 
     total_owing = total_loans - total_paid
