@@ -19,6 +19,14 @@ django-rq>=3.1
 # Redis client
 redis>=5.0
 
+gunicorn
+
+whitenoise
+
+dj-database-url
+
+psycopg2-binary
+
 # Email sending (optional, for Gmail/SMTP)
 # smtplib is built-in, no need to install separately
 

@@ -1,12 +1,12 @@
 """
 Django settings for loans_project project.
-
 Environment variables handled via python-decouple (.env file)
 """
 
 from pathlib import Path
 import os
 from decouple import config, Csv
+import dj_database_url
 
 # ------------------------
 # Base Directory
@@ -18,18 +18,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="", cast=Csv())
+
+# ALLOWED_HOSTS from env (comma-separated)
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
 
 # ------------------------
 # Email Configuration
 # ------------------------
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_HOST = config("EMAIL_HOST", default="")
 EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_PASS")
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_PASS", default="")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@example.com")
 
 # ------------------------
 # Installed Apps
@@ -60,6 +62,7 @@ AUTH_USER_MODEL = 'loans_project.Client'
 # ------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',   # must be right after SecurityMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -96,16 +99,12 @@ TEMPLATES = [
 # ------------------------
 # Database
 # ------------------------
-# Default: SQLite, can be replaced with Postgres/MySQL via .env
 DATABASES = {
-    'default': {
-        'ENGINE': config("DB_ENGINE", default="django.db.backends.sqlite3"),
-        'NAME': config("DB_NAME", default=BASE_DIR / "db.sqlite3"),
-        'USER': config("DB_USER", default=""),
-        'PASSWORD': config("DB_PASSWORD", default=""),
-        'HOST': config("DB_HOST", default=""),
-        'PORT': config("DB_PORT", default=""),
-    }
+    'default': dj_database_url.config(
+        default=config("DATABASE_URL", default=f"sqlite:///{BASE_DIR}/db.sqlite3"),
+        conn_max_age=600,
+        ssl_require=False  # Render Postgres works fine without forced SSL
+    )
 }
 
 # ------------------------
@@ -136,6 +135,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# WhiteNoise for static files
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 # ------------------------
 # REST Framework
 # ------------------------
@@ -151,7 +153,7 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config("REDIS_URL"),
+        "LOCATION": config("REDIS_URL", default="redis://localhost:6379/0"),
         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
     }
 }
