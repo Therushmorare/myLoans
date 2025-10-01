@@ -1,23 +1,23 @@
 # Django core
-Django>=5.1.3,<6.0
+Django
 
 # Environment variables
-python-decouple>=3.8
+python-decouple
 
 # Django REST Framework
-djangorestframework>=3.20
+djangorestframework
 
 # JWT Authentication
-djangorestframework-simplejwt>=6.0
+djangorestframework-simplejwt
 
 # Redis support
-django-redis>=6.1
+django-redis
 
 # Django RQ for background jobs
-django-rq>=3.1
+django-rq
 
 # Redis client
-redis>=5.0
+redis
 
 gunicorn
 
