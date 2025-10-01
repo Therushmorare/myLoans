@@ -13,7 +13,7 @@ class Repayment(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="loans")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="repayments")
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE, related_name="repayments")
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     status = models.CharField(max_length=10, choices=REPAYMENT_STATUS_CHOICES, default="PENDING")

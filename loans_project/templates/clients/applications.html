@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,15 +14,15 @@
     <title>Nexus Finance | My Applications</title>
 
     <!-- Custom fonts for this template-->
-    <link href="/loans_project/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="/loans_project/static/styles/dashboard.css" rel="stylesheet">
-    <link href="/loans_project/static/styles/loan_form.css" rel="stylesheet">
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/loan_form.css' %}" rel="stylesheet">
 
 </head>
 
@@ -58,6 +60,20 @@
                 Menu
             </div>
 
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Menu
+            </div>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'loan_applications' %}" aria-expanded="true">
@@ -77,6 +93,13 @@
                 <a class="nav-link" href="{% url 'portfolio' %}" aria-expanded="true">
                     <i class="fas fa-fw fa-chart-line"></i>
                     <span>Portfolio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'payments' %}" aria-expanded="true">
+                    <i class="fas fa-fw fa-wallet"></i>
+                    <span>Payments</span>
                 </a>
             </li>
 
@@ -263,7 +286,7 @@
 
                                                 <h6 class="fw-bold">Applicant Details</h6>
                                                 <p><b>Name:</b> {{ loan.first_name }} {{ loan.last_name }}</p>
-                                                <p><b>Citizen:</b> {{ "Yes" if loan.citizen else "No" }}</p>
+                                                <p><b>Citizen:</b> {{ loan.citizen }}</p>
                                                 <p><b>ID Number:</b> {{ loan.id_number }}</p>
                                                 <p><b>Email:</b> {{ loan.email }}</p>
                                                 <p><b>Phone:</b> {{ loan.phone }}</p>
@@ -343,21 +366,21 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-     <script src="/loans_project/static/vendor/jquery/jquery.min.js"></script>
-     <script src="/loans_project/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="/loans_project/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="/loans_project/static/js/sb-admin-2.min.js"></script>
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 
     <!-- Page level plugins -->
-    <script src="/loans_project/static/vendor/chart.js/Chart.min.js"></script>
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="/loans_project/static/js/demo/chart-area-demo.js"></script>
-    <script src="/loans_project/static/js/demo/chart-pie-demo.js"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

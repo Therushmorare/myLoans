@@ -32,7 +32,7 @@ def client_dashboard(request):
     total_loans = Loan.objects.filter(user=request.user, status='APPROVED') \
                               .aggregate(total=Sum('amount'))['total'] or 0
 
-    total_paid = Repayment.objects.filter(loan__client=request.user, status='SUCCESS') \
+    total_paid = Repayment.objects.filter(user=request.user, status='SUCCESS') \
                                   .aggregate(total=Sum('amount'))['total'] or 0
 
     total_owing = total_loans - total_paid
@@ -125,15 +125,15 @@ def loan_type(request):
     return render(request, "clients/loan_type.html", context=context)
 
 @login_required(login_url='/login/')
-def apply_for_loan(request, id):
+def apply_for_loan(request):
 
     if request.method == "POST":
         user_id = request.user.id
         package_name = request.POST.get("package")
         term = request.POST.get("term")
         description = request.POST.get("description")
-        interest = request.POST.get(interest)
-        duration = request.POST.get(duration)
+        interest = request.POST.get("interest")
+        duration = request.POST.get("duration")
 
         context = {
         "user_id": user_id,
@@ -213,10 +213,10 @@ def processApplication(request, id):
             return redirect("dashboard")
         else:
             messages.error(request, "Failed to process loan.")
-            return redirect("apply_loan")
+            return redirect("apply")
 
     # if GET request, maybe render the application form
-    return render(request, "clients/apply_loan.html", {"client": client})
+    return render(request, "clients/apply.html", {"client": client})
 
 @login_required(login_url='/login/')
 def submit_payment(request, loan_id):

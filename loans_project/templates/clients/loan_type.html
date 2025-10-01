@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,14 +14,14 @@
     <title>Nexus Finance | Loans</title>
 
     <!-- Custom fonts for this template-->
-    <link href="/loans_project/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="/loans_project/static/styles/dashboard.css" rel="stylesheet">
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
 
 </head>
 
@@ -44,8 +46,8 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    <i class="fas fa-fw fa-home"></i>
                     <span>Dashboard</span></a>
             </li>
 
@@ -59,21 +61,21 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="#" aria-expanded="true">
+                <a class="nav-link" href="{% url 'loan_applications' %}" aria-expanded="true">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Applications</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#" aria-expanded="true">
+                <a class="nav-link" href="{% url 'account' %}" aria-expanded="true">
                     <i class="fas fa-fw fa-wallet"></i>
                     <span>Account</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#" aria-expanded="true">
+                <a class="nav-link" href="{% url 'portfolio' %}" aria-expanded="true">
                     <i class="fas fa-fw fa-chart-line"></i>
                     <span>Portfolio</span>
                 </a>
@@ -81,7 +83,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'payments' %}" aria-expanded="true">
-                    <i class="fas fa-fw fa-chart-wallet"></i>
+                    <i class="fas fa-fw fa-wallet"></i>
                     <span>Payments</span>
                 </a>
             </li>
@@ -171,7 +173,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{% url 'account' %}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -184,7 +186,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{% url 'logout' %}" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -202,18 +204,16 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
-                                class="fas fa-file fa-sm text-white-50"></i>&nbsp;Apply For Loan</a>
                     </div>
 
                     <!-- Content Row -->
                     <div class="row">
                         {% for name, details in packages.items %}
-                        <div class="col-12 col-md-6 col-lg-4">
+                        <div class="col-12 col-md-6 col-lg-4" style="margin-bottom:10px;">
                             <div class="card p-4 mb-4 shadow-sm border-0 h-100 package-card">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h4 class="fw-bold text-danger">{{ name }}</h4>
-                                    <span class="badge bg-danger">Term: {{ details.0 }}</span>
+                                    <span class="badge bg-danger text-white-50">Term: {{ details.0 }}</span>
                                 </div>
                                 <p class="text-muted mb-3">{{ details.1 }}</p>
                                 
@@ -279,28 +279,28 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
-     <script src="/loans_project/static/vendor/jquery/jquery.min.js"></script>
+     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
      <script src="/loans_project/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="/loans_project/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="/loans_project/static/js/sb-admin-2.min.js"></script>
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 
     <!-- Page level plugins -->
-    <script src="/loans_project/static/vendor/chart.js/Chart.min.js"></script>
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="/loans_project/static/js/demo/chart-area-demo.js"></script>
-    <script src="/loans_project/static/js/demo/chart-pie-demo.js"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
 
 </body>
 

@@ -1,3 +1,6 @@
+{% load static %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,15 +15,15 @@
     <title>Nexus Finance | My Portfolio</title>
 
     <!-- Custom fonts for this template-->
-    <link href="/loans_project/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="/loans_project/static/styles/dashboard.css" rel="stylesheet">
-    <link href="/loans_project/static/styles/loan_form.css" rel="stylesheet">
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/loan_form.css' %}" rel="stylesheet">
 
 </head>
 
@@ -82,7 +85,7 @@
             
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'payments' %}" aria-expanded="true">
-                    <i class="fas fa-fw fa-chart-wallet"></i>
+                    <i class="fas fa-fw fa-wallet"></i>
                     <span>Payments</span>
                 </a>
             </li>
@@ -231,7 +234,7 @@
                                         <td>{{ loan.amount }}</td>
                                         <td>{{ loan_interest.amount }}</td>
                                         <td>{{ loan_repaid.total }}</td>
-                                        <td>{{ loan.amount + loan_interest.amount - loan_repaid.total }}</td>
+                                        <td>{{ loan|calculate_outstanding:loan_interest|calculate_outstanding:loan_repaid }}</td>
                                         <td>
                                             <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#paymentModal{{ loan.id }}">
                                                 Pay
@@ -249,10 +252,10 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-floating mb-3">
-                                                                    <input type="number" class="form-control" id="paymentAmount{{ loan.id }}" name="amount" placeholder="Amount" max="{{ loan.amount + loan_interest.amount - loan_repaid.total }}" required>
+                                                                    <input type="number" class="form-control" id="paymentAmount{{ loan.id }}" name="amount" placeholder="Amount" max="{{ loan|calculate_outstanding:loan_interest|calculate_outstanding:loan_repaid }}" required>
                                                                     <label for="paymentAmount{{ loan.id }}">Amount</label>
                                                                     <div class="invalid-feedback">
-                                                                        Enter an amount up to {{ loan.amount + loan_interest.amount - loan_repaid.total }}.
+                                                                        Enter an amount up to {{ loan|calculate_outstanding:loan_interest|calculate_outstanding:loan_repaid }}.
                                                                     </div>
                                                                 </div>
 
@@ -267,7 +270,7 @@
                                                                 </div>
 
                                                                 <p class="text-muted">
-                                                                    Max payable: {{ loan.amount + loan_interest.amount - loan_repaid.total }}
+                                                                    Max payable: {{ loan|calculate_outstanding:loan_interest|calculate_outstanding:loan_repaid }}
                                                                 </p>
                                                             </div>
                                                             <div class="modal-footer">
@@ -342,21 +345,21 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-     <script src="/loans_project/static/vendor/jquery/jquery.min.js"></script>
-     <script src="/loans_project/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="/loans_project/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="/loans_project/static/js/sb-admin-2.min.js"></script>
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 
     <!-- Page level plugins -->
-    <script src="/loans_project/static/vendor/chart.js/Chart.min.js"></script>
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="/loans_project/static/js/demo/chart-area-demo.js"></script>
-    <script src="/loans_project/static/js/demo/chart-pie-demo.js"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>

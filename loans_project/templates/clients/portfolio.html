@@ -1,3 +1,6 @@
+{% load static %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,15 +15,15 @@
     <title>Nexus Finance | My Portfolio</title>
 
     <!-- Custom fonts for this template-->
-    <link href="/loans_project/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="/loans_project/static/styles/dashboard.css" rel="stylesheet">
-    <link href="/loans_project/static/styles/loan_form.css" rel="stylesheet">
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/loan_form.css' %}" rel="stylesheet">
 
 </head>
 
@@ -82,7 +85,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'payments' %}" aria-expanded="true">
-                    <i class="fas fa-fw fa-chart-wallet"></i>
+                    <i class="fas fa-fw fa-wallet"></i>
                     <span>Payments</span>
                 </a>
             </li>
@@ -224,7 +227,7 @@
                                 <div class="card shadow-sm p-3 text-center">
                                     <h5>Total Interest Earned</h5>
                                     <h3 class="text-danger">
-                                        R {{ interests|sum(attribute='incurred_amount')|floatformat:2 }}
+                                        R {{ interests|sum:"incurred_amount"|floatformat:2 }}
                                     </h3>
                                 </div>
                             </div>
@@ -232,7 +235,7 @@
                                 <div class="card shadow-sm p-3 text-center">
                                     <h5>Total Repaid</h5>
                                     <h3 class="text-danger">
-                                        R {{ repayments|filterattr('status','SUCCESS')|sum(attribute='amount')|floatformat:2 }}
+                                        R {{ repayments|filterattr:"status,SUCCESS"|sum:"amount"|floatformat:2 }}
                                     </h3>
                                 </div>
                             </div>
@@ -269,7 +272,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            R {{ loan.interests|sum(attribute='incurred_amount')|floatformat:2 }}
+                                            R {{ loan.interests|sum:"incurred_amount"|floatformat:2 }}
                                         </td>
                                         <td>{{ loan.duration_months }} months</td>
                                         <td>
@@ -398,21 +401,21 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-     <script src="/loans_project/static/vendor/jquery/jquery.min.js"></script>
+     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
      <script src="/loans_project/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="/loans_project/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="/loans_project/static/js/sb-admin-2.min.js"></script>
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 
     <!-- Page level plugins -->
-    <script src="/loans_project/static/vendor/chart.js/Chart.min.js"></script>
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="/loans_project/static/js/demo/chart-area-demo.js"></script>
-    <script src="/loans_project/static/js/demo/chart-pie-demo.js"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
