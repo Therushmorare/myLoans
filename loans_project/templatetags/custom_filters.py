@@ -46,8 +46,10 @@ def get_repaid(payments, loan_id):
     except Exception:
         return 0
     
-@register.filter
-def calculate_outstanding(loan, args):
-    interest = args.get("interest")
-    repaid = args.get("repaid")
-    return loan.amount + interest.amount - repaid.total
+@register.simple_tag
+def calculate_outstanding(principal, interest, repaid):
+    """Compute the remaining balance"""
+    try:
+        return (principal + interest) - repaid
+    except TypeError:
+        return 0

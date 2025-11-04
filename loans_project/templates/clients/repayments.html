@@ -36,9 +36,9 @@
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'dashboard' %}">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-money"></i>
+                    <i class="fas fa-landmark"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">Nexus Finance</div>
             </a>
@@ -234,7 +234,7 @@
                                         <td>{{ loan.amount }}</td>
                                         <td>{{ loan_interest.amount }}</td>
                                         <td>{{ loan_repaid.total }}</td>
-                                        <td>{{ loan|calculate_outstanding:loan_interest|calculate_outstanding:loan_repaid }}</td>
+                                        <td>{% calculate_outstanding loan.amount loan_interest.amount loan_repaid.total %}</td>
                                         <td>
                                             <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#paymentModal{{ loan.id }}">
                                                 Pay
@@ -252,10 +252,10 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-floating mb-3">
-                                                                    <input type="number" class="form-control" id="paymentAmount{{ loan.id }}" name="amount" placeholder="Amount" max="{{ loan|calculate_outstanding:loan_interest|calculate_outstanding:loan_repaid }}" required>
+                                                                    <input type="number" class="form-control" id="paymentAmount{{ loan.id }}" name="amount" placeholder="Amount" max="{% calculate_outstanding loan.amount loan_interest.amount loan_repaid.total %}" required>
                                                                     <label for="paymentAmount{{ loan.id }}">Amount</label>
                                                                     <div class="invalid-feedback">
-                                                                        Enter an amount up to {{ loan|calculate_outstanding:loan_interest|calculate_outstanding:loan_repaid }}.
+                                                                        Enter an amount up to {% calculate_outstanding loan.amount loan_interest.amount loan_repaid.total %}.
                                                                     </div>
                                                                 </div>
 
@@ -270,7 +270,7 @@
                                                                 </div>
 
                                                                 <p class="text-muted">
-                                                                    Max payable: {{ loan|calculate_outstanding:loan_interest|calculate_outstanding:loan_repaid }}
+                                                                    Max payable: {% calculate_outstanding loan.amount loan_interest.amount loan_repaid.total %}
                                                                 </p>
                                                             </div>
                                                             <div class="modal-footer">

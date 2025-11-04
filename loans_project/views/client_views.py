@@ -151,7 +151,7 @@ def processApplication(request, id):
     client = get_object_or_404(Client, id=id)
 
     if request.method == "POST":
-        # form fields
+        # Collect POST fields
         package = request.POST.get("package_name")
         loan_term = request.POST.get("term")
         interest = request.POST.get("interest")
@@ -161,7 +161,7 @@ def processApplication(request, id):
         reason = request.POST.get("reason")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
-        citizen = request.POST.get("citizen")
+        citizen = request.POST.get("citizen", "no").lower()
         id_number = request.POST.get("ID_number")
         email = request.POST.get("email")
         phone = request.POST.get("phone_number")
@@ -173,49 +173,64 @@ def processApplication(request, id):
         position = request.POST.get("position")
         salary = request.POST.get("salary")
 
-        # file uploads
+        # Convert numeric fields
+        from decimal import Decimal
+        try:
+            amount = Decimal(amount) if amount else None
+            interest = Decimal(interest) if interest else None
+            duration = int(duration) if duration else None
+            salary = Decimal(salary) if salary else None
+        except Exception as e:
+            messages.error(request, f"Invalid numeric input: {e}")
+            return render(request, "clients/apply.html", {"client": client, "form_data": request.POST})
+
+        # File uploads
         id_document = request.FILES.get("ID_file")
         proof_of_income = request.FILES.get("proof_of_income")
         proof_of_res = request.FILES.get("proof_of_res")
         employment = request.FILES.get("employment_doc")
 
-        # process loan
-        loan = loan_apply.process_loan_application(
-            user=request.user,
-            package=package,
-            loan_term=loan_term,
-            interest=interest,
-            duration=duration,
-            amount=amount,
-            date=date,
-            reason=reason,
-            first_name=first_name,
-            last_name=last_name,
-            citizen=citizen,
-            id_number=id_number,
-            email=email,
-            phone=phone,
-            address=address,
-            postal_code=postal_code,
-            city=city,
-            province=province,
-            company=company,
-            position=position,
-            salary=salary,
-            id_document=id_document,
-            proof_of_income=proof_of_income,
-            proof_of_res=proof_of_res,
-            employment=employment
-        )
+        # Process loan safely
+        try:
+            loan = loan_apply.process_loan_application(
+                user=request.user,
+                package=package,
+                loan_term=loan_term,
+                interest=interest,
+                duration=duration,
+                amount=amount,
+                date=date,
+                reason=reason,
+                first_name=first_name,
+                last_name=last_name,
+                citizen=citizen,
+                id_number=id_number,
+                email=email,
+                phone=phone,
+                address=address,
+                postal_code=postal_code,
+                city=city,
+                province=province,
+                company=company,
+                position=position,
+                salary=salary,
+                id_document=id_document,
+                proof_of_income=proof_of_income,
+                proof_of_res=proof_of_res,
+                employment=employment
+            )
+        except Exception as e:
+            messages.error(request, f"Error processing loan: {e}")
+            return render(request, "clients/apply.html", {"client": client, "form_data": request.POST})
 
         if loan:
             messages.success(request, f"Loan {loan.loan_id} processed with status {loan.status}")
             return redirect("dashboard")
         else:
             messages.error(request, "Failed to process loan.")
-            return redirect("apply")
+            return render(request, "clients/apply.html", {"client": client, "form_data": request.POST})
 
-    # if GET request, maybe render the application form
+    # GET request
     return render(request, "clients/apply.html", {"client": client})
 
 @login_required(login_url='/login/')

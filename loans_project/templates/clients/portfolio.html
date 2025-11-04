@@ -36,9 +36,9 @@
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'dashboard' %}">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-money"></i>
+                    <i class="fas fa-landmark"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">Nexus Finance</div>
             </a>
@@ -256,98 +256,99 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {% for loan in loans %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ loan.loan_id }}</td>
-                                        <td>{{ loan.package }}</td>
-                                        <td>R {{ loan.amount|floatformat:2 }}</td>
-                                        <td>
-                                            <span class="badge 
-                                                {% if loan.status == 'APPROVED' %} bg-success
-                                                {% elif loan.status == 'REJECTED' %} bg-danger
-                                                {% else %} bg-warning text-dark {% endif %}">
-                                                {{ loan.status }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            R {{ loan.interests|sum:"incurred_amount"|floatformat:2 }}
-                                        </td>
-                                        <td>{{ loan.duration_months }} months</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#loanModal{{ loan.id }}">
-                                                View
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Loan Modal -->
-                                    <div class="modal fade" id="loanModal{{ loan.id }}" tabindex="-1" aria-labelledby="loanModalLabel{{ loan.id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="loanModalLabel{{ loan.id }}">
-                                                        Loan Details: {{ loan.loan_id }}
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <h6 class="fw-bold">Loan Info</h6>
-                                                    <p><b>Package:</b> {{ loan.package }}</p>
-                                                    <p><b>Term:</b> {{ loan.loan_term }}</p>
-                                                    <p><b>Interest Rate:</b> {{ loan.interest_rate }}%</p>
-                                                    <p><b>Duration:</b> {{ loan.duration_months }} months</p>
-                                                    <p><b>Amount:</b> R {{ loan.amount|floatformat:2 }}</p>
-                                                    <p><b>Reason:</b> {{ loan.reason }}</p>
-                                                    <hr>
-
-                                                    <h6 class="fw-bold">Repayments</h6>
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered table-sm">
-                                                            <thead class="table-secondary">
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Amount</th>
-                                                                    <th>Status</th>
-                                                                    <th>Date</th>
-                                                                    <th>Reference</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {% for repay in loan.repayments.all %}
-                                                                <tr>
-                                                                    <td>{{ loop.index }}</td>
-                                                                    <td>R {{ repay.amount|floatformat:2 }}</td>
-                                                                    <td>{{ repay.status }}</td>
-                                                                    <td>{{ repay.repaid_at|date:"Y-m-d H:i" }}</td>
-                                                                    <td>{{ repay.reference }}</td>
-                                                                </tr>
-                                                                {% empty %}
-                                                                <tr>
-                                                                    <td colspan="5" class="text-center">No repayments yet</td>
-                                                                </tr>
-                                                                {% endfor %}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-                                                    <h6 class="fw-bold mt-3">Documents</h6>
-                                                    <p><b>ID Document:</b> <a href="{{ loan.id_document.url }}" target="_blank">View</a></p>
-                                                    <p><b>Proof of Income:</b> <a href="{{ loan.proof_of_income.url }}" target="_blank">View</a></p>
-                                                    <p><b>Proof of Residence:</b> <a href="{{ loan.proof_of_residence.url }}" target="_blank">View</a></p>
-                                                    <p><b>Employment Doc:</b> <a href="{{ loan.employment_doc.url }}" target="_blank">View</a></p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {% endfor %}
-                                </tbody>
+                            <tbody>
+                                {% for loan in loans %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td class="text-truncate" style="max-width:120px;">{{ loan.loan_id }}</td>
+                                    <td class="text-truncate" style="max-width:150px;">{{ loan.package }}</td>
+                                    <td>R {{ loan.amount|floatformat:2 }}</td>
+                                    <td>
+                                        <span class="badge rounded-pill d-inline-block text-truncate px-2 py-1" 
+                                            style="max-width:100px; text-align:center;
+                                                    {% if loan.status == 'APPROVED' %} background-color:#28a745; color:white;
+                                                    {% elif loan.status == 'REJECTED' %} background-color:#dc3545; color:white;
+                                                    {% else %} background-color:#ffc107; color:#212529; {% endif %}">
+                                            {{ loan.status }}
+                                        </span>
+                                    </td>
+                                    <td>R {{ loan.interests|sum:"incurred_amount"|floatformat:2 }}</td>
+                                    <td>{{ loan.duration_months }} months</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#loanModal{{ loan.id }}">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
                             </table>
+
+                        <!-- Loan Modal -->
+                        {% for loan in loans %}
+                        <div class="modal fade" id="loanModal{{ loan.id }}" tabindex="-1" aria-labelledby="loanModalLabel{{ loan.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title fw-bold text-danger" id="loanModalLabel{{ loan.id }}">
+                                            Loan Details: {{ loan.loan_id }}
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h6 class="fw-bold mt-3">Loan Info</h6>
+                                        <p><b>Package:</b> {{ loan.package }}</p>
+                                        <p><b>Term:</b> {{ loan.loan_term }}</p>
+                                        <p><b>Interest Rate:</b> {{ loan.interest_rate }}%</p>
+                                        <p><b>Duration:</b> {{ loan.duration_months }} months</p>
+                                        <p><b>Amount:</b> R {{ loan.amount|floatformat:2 }}</p>
+                                        <p><b>Reason:</b> {{ loan.reason }}</p>
+                                        
+                                        <hr>
+                                        <h6 class="fw-bold mt-3">Repayments</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-sm">
+                                                <thead class="table-secondary">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Amount</th>
+                                                        <th>Status</th>
+                                                        <th>Date</th>
+                                                        <th>Reference</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for repay in loan.repayments.all %}
+                                                    <tr>
+                                                        <td>{{ loop.index }}</td>
+                                                        <td>R {{ repay.amount|floatformat:2 }}</td>
+                                                        <td>{{ repay.status }}</td>
+                                                        <td>{{ repay.repaid_at|date:"Y-m-d H:i" }}</td>
+                                                        <td>{{ repay.reference }}</td>
+                                                    </tr>
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">No repayments yet</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <h6 class="fw-bold mt-3">Documents</h6>
+                                        <p><b>ID Document:</b> <a href="{{ loan.id_document.url }}" target="_blank">View</a></p>
+                                        <p><b>Proof of Income:</b> <a href="{{ loan.proof_of_income.url }}" target="_blank">View</a></p>
+                                        <p><b>Proof of Residence:</b> <a href="{{ loan.proof_of_residence.url }}" target="_blank">View</a></p>
+                                        <p><b>Employment Doc:</b> <a href="{{ loan.employment_doc.url }}" target="_blank">View</a></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
                         </div>
                     </div>
 

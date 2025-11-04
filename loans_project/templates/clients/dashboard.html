@@ -34,9 +34,9 @@
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'dashboard' %}">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-money"></i>
+                    <i class="fas fa-landmark"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">Nexus Finance</div>
             </a>
@@ -48,7 +48,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'dashboard' %}">
                     <i class="fas fa-fw fa-home"></i>
-                    <span>Dashboard</span></a>
+                    <span>Home</span></a>
             </li>
 
             <!-- Divider -->
@@ -196,7 +196,6 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">R{{total_loans}}</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -214,7 +213,6 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">R{{total_owing}}</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -232,7 +230,6 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">R{{total_paid}}</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -250,7 +247,6 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">R{{interest_to_pay}}</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
