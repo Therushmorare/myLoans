@@ -19,6 +19,7 @@ from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from loans_project.views.auth_view import signup_view, login_view, logout_view, forgot_pass_view
 from loans_project.views.client_views import *
+from loans_project.views.admin_view import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -39,6 +40,7 @@ urlpatterns = [
     path('my-portfolio/', portfolio, name='portfolio'),
     path('my-payments/', payments, name='payments'),
     path('submit-payment/<uuid:loan_id>/', submit_payment, name='submit_payment'),
+    path('admin-dashboard/', admin_page, name='admin_dashboard'),
     path('django-rq/', include('django_rq.urls'))
 ]
 
