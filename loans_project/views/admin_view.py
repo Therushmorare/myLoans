@@ -16,3 +16,6 @@ import django_rq #Replace with celery on big apps
 
 def admin_page(request):
     return render(request, "admin/index.html")
+
+def admin_applications(request):
+    return render(request, "admin/applications.html")

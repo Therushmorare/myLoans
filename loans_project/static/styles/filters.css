@@ -1,0 +1,46 @@
+/* Glass Card/Table Filters */
+.glass-filters {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    flex-wrap: wrap;
+}
+
+.filter-input {
+    min-width: 120px;
+    max-width: 200px;
+    background: rgba(255,255,255,0.05);
+    color: #888;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+}
+
+.filter-input::placeholder {
+    color: #ccc;
+}
+
+/* Glass Table Card */
+.glass-table-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 15px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* Table Styling */
+table.modern-table th, table.modern-table td {
+    vertical-align: middle;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+table.modern-table thead {
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+}

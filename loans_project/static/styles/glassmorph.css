@@ -1,0 +1,41 @@
+/* High-Contrast Glassmorphism Card */
+.glass-card {
+    background: rgba(0, 0, 0, 0.45);  /* darker for contrast */
+    border-radius: 20px;
+    padding: 25px 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover lift */
+.glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+}
+
+/* Label styling */
+.glass-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.85);  /* Brighter */
+    font-weight: 600;
+}
+
+/* Main value */
+.glass-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;  /* Pure white for visibility */
+    margin-top: 6px;
+}
+
+/* Body gradient with brighter tones */
+body {
+    background: linear-gradient(135deg, #2a2e35, #4b4d60);
+    background-attachment: fixed;
+}

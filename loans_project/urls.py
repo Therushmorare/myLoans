@@ -41,6 +41,7 @@ urlpatterns = [
     path('my-payments/', payments, name='payments'),
     path('submit-payment/<uuid:loan_id>/', submit_payment, name='submit_payment'),
     path('admin-dashboard/', admin_page, name='admin_dashboard'),
+    path('applications/', admin_applications, name='admin_applications'),
     path('django-rq/', include('django_rq.urls'))
 ]
 

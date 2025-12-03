@@ -1,0 +1,359 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Nexus Finance | Admin Dashboard</title>
+
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/glassmorph.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/filters.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <!-- Bootstrap 5 JS (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body id="page-top">
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
+
+            <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
+               href="{% url 'dashboard' %}">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="sidebar-brand-text mx-2 fw-bold">Nexus Finance</div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading small text-muted text-uppercase">
+                Menu
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard Overview</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Applications</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Portfolio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-users"></i>
+                    <span>Service Providers</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Disbursements</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-cog"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Feedback</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account</span>
+                </a>
+            </li>
+
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End Sidebar -->
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white shadow mb-4 topbar">
+
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto">
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown">
+                                <span class="mr-2 text-gray-700 small fw-semibold">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+
+                                <a class="dropdown-item" href="{% url 'account' %}">
+                                    <i class="fas fa-user mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+                </nav>
+
+    <!-- Container -->
+    <div class="container-fluid pt-3">
+
+        <!-- Page Heading -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-dark">Applications</h4>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs modern-tabs mb-3" id="applicationTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="new-tab" data-bs-toggle="tab"
+                    data-bs-target="#newApplications" type="button" role="tab">New Applications</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="old-tab" data-bs-toggle="tab"
+                    data-bs-target="#oldApplications" type="button" role="tab">Old Applications</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+
+            <!-- New Applications -->
+            <div class="tab-pane fade show active" id="newApplications" role="tabpanel">
+
+                <!-- Filters -->
+                <div class="filters mb-3 p-3 glass-filters d-flex flex-wrap gap-2">
+                    <input type="text" class="form-control filter-input" placeholder="Search Name" data-column="0">
+                    <input type="text" class="form-control filter-input" placeholder="Search Email" data-column="1">
+                    <input type="text" class="form-control filter-input" placeholder="Search Phone" data-column="2">
+                    <select class="form-select filter-input" data-column="5">
+                        <option value="">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                    <input type="date" class="form-control filter-input" data-column="4">
+                    <input type="number" class="form-control filter-input" placeholder="Min Amount" data-column="3">
+                </div>
+
+                <!-- Table -->
+                <div class="glass-table-card">
+                    <div class="table-responsive p-3">
+                        <table class="table modern-table table-striped align-middle text-light" id="newAppsTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Amount Requested</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for applicant in new_applicants %}
+                                <tr>
+                                    <td>{{ applicant.name }}</td>
+                                    <td>{{ applicant.email }}</td>
+                                    <td>{{ applicant.phone }}</td>
+                                    <td>R{{ applicant.amount }}</td>
+                                    <td>{{ applicant.date }}</td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success">Approve</button>
+                                        <button class="btn btn-sm btn-danger">Reject</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Old Applications -->
+            <div class="tab-pane fade" id="oldApplications" role="tabpanel">
+
+                <!-- Filters -->
+                <div class="filters mb-3 p-3 glass-filters d-flex flex-wrap gap-2">
+                    <input type="text" class="form-control filter-input" placeholder="Search Name" data-column="0">
+                    <input type="text" class="form-control filter-input" placeholder="Search Email" data-column="1">
+                    <input type="text" class="form-control filter-input" placeholder="Search Phone" data-column="2">
+                    <select class="form-select filter-input" data-column="5">
+                        <option value="">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                    <input type="date" class="form-control filter-input" data-column="4">
+                    <input type="number" class="form-control filter-input" placeholder="Min Amount" data-column="3">
+                </div>
+
+                <!-- Table -->
+                <div class="glass-table-card">
+                    <div class="table-responsive p-3">
+                        <table class="table modern-table table-striped align-middle text-light" id="oldAppsTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Amount Requested</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for applicant in old_applicants %}
+                                <tr>
+                                    <td>{{ applicant.name }}</td>
+                                    <td>{{ applicant.email }}</td>
+                                    <td>{{ applicant.phone }}</td>
+                                    <td>R{{ applicant.amount }}</td>
+                                    <td>{{ applicant.date }}</td>
+                                    <td>
+                                        {% if applicant.status == "Approved" %}
+                                        <span class="badge bg-success">Approved</span>
+                                        {% elif applicant.status == "Rejected" %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                        {% else %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+
+<script>
+document.querySelectorAll('.filter-input').forEach(input => {
+    input.addEventListener('input', function() {
+        const table = this.closest('.tab-pane').querySelector('table');
+        const rows = table.querySelectorAll('tbody tr');
+        const filters = this.closest('.filters').querySelectorAll('.filter-input');
+
+        rows.forEach(row => {
+            let show = true;
+            filters.forEach(f => {
+                const colIndex = f.dataset.column;
+                const val = f.value.toLowerCase();
+                const cell = row.cells[colIndex] ? row.cells[colIndex].innerText.toLowerCase() : '';
+                if(val && !cell.includes(val)) show = false;
+            });
+            row.style.display = show ? '' : 'none';
+        });
+    });
+});
+</script>
+
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+</body>
+</html>
