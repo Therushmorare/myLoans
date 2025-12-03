@@ -42,6 +42,11 @@ urlpatterns = [
     path('submit-payment/<uuid:loan_id>/', submit_payment, name='submit_payment'),
     path('admin-dashboard/', admin_page, name='admin_dashboard'),
     path('applications/', admin_applications, name='admin_applications'),
+    path('admin-portfolio/', admin_portfolio, name='admin_portfolio'),
+    path('service-providers/', service_providers, name='service_providers'),
+    path('disbursements/', admin_disbursements, name='admin_disbursements'),
+    path('user-management/', user_management, name='user_management'),
+    path('dispute-management/', admin_dispute_management, name='admin_dispute_management'),
     path('django-rq/', include('django_rq.urls'))
 ]
 

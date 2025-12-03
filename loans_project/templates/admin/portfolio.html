@@ -1,0 +1,558 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nexus Finance | Portfolio</title>
+
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/portfolio.css' %}" rel="stylesheet">
+
+</head>
+<body id="page-top">
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
+
+            <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
+               href="{% url 'dashboard' %}">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="sidebar-brand-text mx-2 fw-bold">Nexus Finance</div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading small text-muted text-uppercase">
+                Menu
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard Overview</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Applications</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Portfolio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-users"></i>
+                    <span>Service Providers</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Disbursements</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-cog"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Feedback</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account</span>
+                </a>
+            </li>
+
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End Sidebar -->
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white shadow mb-4 topbar">
+
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto">
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown">
+                                <span class="mr-2 text-gray-700 small fw-semibold">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+
+                                <a class="dropdown-item" href="{% url 'account' %}">
+                                    <i class="fas fa-user mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+                </nav>
+
+        <div class="container-fluid">
+              <div class="container-fluid py-3">
+                <!-- Heading -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="page-title mb-0">Loan Portfolio</h2>
+                    <div class="text-muted small mt-1">Overview of loans issued, outstanding balances, and borrower list.</div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button id="exportCsv" class="btn btn-outline-dark btn-sm"><i class="fa fa-file-csv me-1"></i>Export CSV</button>
+                    <a href="#" class="btn btn-danger btn-sm">New Loan</a>
+                </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="row g-3 my-3">
+
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="glass-stat-card">
+                            <div class="stat-label">Total Loans</div>
+                            <div class="stat-value">2,000</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="glass-stat-card">
+                            <div class="stat-label">Active Loans</div>
+                            <div class="stat-value">1,800</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="glass-stat-card">
+                            <div class="stat-label">Outstanding</div>
+                            <div class="stat-value">R 88,000,000.00</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="glass-stat-card">
+                            <div class="stat-label">Avg Loan Size</div>
+                            <div class="stat-value">R 40,000.00</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="glass-stat-card">
+                            <div class="stat-label">Interest Earned</div>
+                            <div class="stat-value">R 200,000,000.00</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="glass-stat-card">
+                            <div class="stat-label">Total Re-Paid</div>
+                            <div class="stat-value">R 100,000,000.00</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Top area: chart + quick stats -->
+                <div class="row g-3 mb-3">
+                <div class="col-lg-8">
+                    <div class="analytics-card">
+                    <div class="analytics-header">
+                        <div>
+                        <div class="analytics-title">Loans Issued (Last 12 months)</div>
+                        <div class="text-muted small">Monthly issued loan counts & amounts</div>
+                        </div>
+                        <div>
+                        <select id="timeRange" class="form-select form-select-sm" style="min-width:120px;">
+                            <option value="12">Last 12 months</option>
+                            <option value="6">Last 6 months</option>
+                            <option value="3">Last 3 months</option>
+                        </select>
+                        </div>
+                    </div>
+                    <canvas id="loansChart" height="120"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="analytics-card">
+                    <div class="analytics-header">
+                        <div class="analytics-title">Quick Breakdown</div>
+                    </div>
+
+                    <div class="row text-center mt-2">
+                        <div class="col-6 mb-3">
+                        <div class="stat-label">Delinquent</div>
+                        <div class="stat-value text-light">100</div>
+                        <div class="stat-sub">Past due</div>
+                        </div>
+                        <div class="col-6 mb-3">
+                        <div class="stat-label">Settled</div>
+                        <div class="stat-value text-light">980</div>
+                        <div class="stat-sub">Fully paid</div>
+                        </div>
+
+                        <div class="col-6">
+                        <div class="stat-label">Avg Term</div>
+                        <div class="stat-value text-light">6m</div>
+                        <div class="stat-sub">Months</div>
+                        </div>
+                        <div class="col-6">
+                        <div class="stat-label">Default Rate</div>
+                        <div class="stat-value text-light">20%</div>
+                        <div class="stat-sub">Portfolio rate</div>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters mb-3">
+                <input id="filterSearch" type="search" class="form-control" placeholder="Search borrower, id or phone" style="flex:1">
+                <select id="filterStatus" class="form-select">
+                    <option value="">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Delinquent">Delinquent</option>
+                    <option value="Settled">Settled</option>
+                </select>
+                <input id="filterStart" type="date" class="form-control" placeholder="Start date">
+                <input id="filterEnd" type="date" class="form-control" placeholder="End date">
+                <input id="filterMin" type="number" class="form-control" placeholder="Min amount">
+                <input id="filterMax" type="number" class="form-control" placeholder="Max amount">
+                <button id="clearFilters" class="btn btn-outline-light btn-sm">Clear</button>
+                </div>
+
+                <!-- Loan table -->
+                <div class="table-card">
+                <div class="table-responsive">
+                    <table class="table portfolio-table table-hover align-middle mb-0" id="loansTable">
+                    <thead>
+                        <tr>
+                        <th scope="col">Loan ID</th>
+                        <th scope="col">Borrower</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Principal</th>
+                        <th scope="col">Outstanding</th>
+                        <th scope="col">Issued</th>
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loan in loan_list %}
+                        <tr data-issued="{{ loan.issued_date }}" data-principal="{{ loan.principal }}">
+                        <td>{{ loan.id }}</td>
+                        <td>
+                            <div class="fw-semibold">{{ loan.borrower_name }}</div>
+                            <div class="text-muted small">{{ loan.borrower_email }}</div>
+                        </td>
+                        <td>{{ loan.borrower_phone }}</td>
+                        <td>R{{ loan.principal|floatformat:2 }}</td>
+                        <td>R{{ loan.outstanding|floatformat:2 }}</td>
+                        <td>{{ loan.issued_date }}</td>
+                        <td>{{ loan.due_date }}</td>
+                        <td>
+                            {% if loan.status == "Active" %}
+                            <span class="badge badge-sm bg-primary badge-sm">Active</span>
+                            {% elif loan.status == "Delinquent" %}
+                            <span class="badge badge-sm bg-warning text-dark">Delinquent</span>
+                            {% elif loan.status == "Settled" %}
+                            <span class="badge badge-sm bg-success">Settled</span>
+                            {% else %}
+                            <span class="badge badge-sm bg-secondary">{{ loan.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'view_loan' loan.id %}" class="btn btn-sm btn-outline-light">View</a>
+                            <a href="{% url 'edit_loan' loan.id %}" class="btn btn-sm btn-light text-dark">Manage</a>
+                        </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                        <td colspan="9" class="text-center text-muted">No loans found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+           </div>
+           </div>
+
+        </div>
+    </div>
+
+
+  <!-- Bootstrap JS bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* ---------- Filters logic (client-side) ---------- */
+    (function () {
+      const search = document.getElementById('filterSearch');
+      const status = document.getElementById('filterStatus');
+      const start = document.getElementById('filterStart');
+      const end = document.getElementById('filterEnd');
+      const minAmt = document.getElementById('filterMin');
+      const maxAmt = document.getElementById('filterMax');
+      const clearBtn = document.getElementById('clearFilters');
+      const table = document.getElementById('loansTable');
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+      function parseDate(s) {
+        if(!s) return null;
+        // Expecting YYYY-MM-DD from input
+        return new Date(s + 'T00:00:00');
+      }
+
+      function matchesRow(row) {
+        const q = (search.value || '').trim().toLowerCase();
+        const st = (status.value || '').trim();
+        const sDate = parseDate(start.value);
+        const eDate = parseDate(end.value);
+        const min = parseFloat(minAmt.value) || null;
+        const max = parseFloat(maxAmt.value) || null;
+
+        // fields
+        const cells = row.cells;
+        const borrower = (cells[1].innerText || '').toLowerCase();
+        const phone = (cells[2].innerText || '').toLowerCase();
+        const loanId = (cells[0].innerText || '').toLowerCase();
+        const principal = parseFloat(row.dataset.principal) || parseFloat((cells[3].innerText || '').replace(/[^0-9.-]+/g,"")) || 0;
+        const rowStatus = (cells[7].innerText || '').trim();
+        const issuedStr = row.dataset.issued || (cells[5].innerText || '');
+        const issued = issuedStr ? new Date(issuedStr + 'T00:00:00') : null;
+
+        // search query (loan id, borrower, phone)
+        if(q) {
+          if(!(borrower.includes(q) || phone.includes(q) || loanId.includes(q))) return false;
+        }
+
+        // status
+        if(st) {
+          if(rowStatus.toLowerCase() !== st.toLowerCase()) return false;
+        }
+
+        // date range
+        if(sDate && issued) {
+          if(issued < sDate) return false;
+        }
+        if(eDate && issued) {
+          if(issued > eDate) return false;
+        }
+
+        // amount min/max
+        if(min !== null) {
+          if(principal < min) return false;
+        }
+        if(max !== null) {
+          if(principal > max) return false;
+        }
+
+        return true;
+      }
+
+      function applyFilters() {
+        rows.forEach(r => {
+          r.style.display = matchesRow(r) ? '' : 'none';
+        });
+      }
+
+      [search, status, start, end, minAmt, maxAmt].forEach(el => {
+        el.addEventListener('input', applyFilters);
+        el.addEventListener('change', applyFilters);
+      });
+
+      clearBtn.addEventListener('click', function () {
+        search.value=''; status.value=''; start.value=''; end.value=''; minAmt.value=''; maxAmt.value='';
+        applyFilters();
+      });
+
+      // initial
+      applyFilters();
+
+      // Export CSV simple function
+      document.getElementById('exportCsv').addEventListener('click', () => {
+        const visibleRows = rows.filter(r => r.style.display !== 'none');
+        const csv = [];
+        csv.push(['Loan ID','Borrower','Phone','Principal','Outstanding','Issued','Due Date','Status']);
+        visibleRows.forEach(r=> {
+          const cells = r.cells;
+          csv.push([
+            cells[0].innerText.trim(),
+            cells[1].innerText.trim().replace(/\n/g,' '),
+            cells[2].innerText.trim(),
+            cells[3].innerText.trim(),
+            cells[4].innerText.trim(),
+            cells[5].innerText.trim(),
+            cells[6].innerText.trim(),
+            cells[7].innerText.trim(),
+          ]);
+        });
+        const csvContent = "data:text/csv;charset=utf-8," + csv.map(e=>e.map(a=>`"${String(a).replace(/"/g,'""')}"`).join(',')).join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "portfolio_loans.csv");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      });
+
+    })();
+
+    /* ---------- Chart (loans over time) ---------- */
+    (function () {
+      // Data passed from Django: loans_by_month = [{month: '2025-01', count: 12, amount: 12345}, ...]
+      const raw = {{ loans_by_month|default:"[]"|safe }};
+
+      // convert labels / datasets
+      const labels = raw.map(r => r.month);
+      const counts = raw.map(r => r.count);
+      const amounts = raw.map(r => r.amount);
+
+      const ctx = document.getElementById('loansChart');
+      if(!ctx) return;
+
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Loans Count',
+              data: counts,
+              yAxisID: 'y',
+              tension: 0.3,
+              borderColor: 'rgba(94, 234, 212, 0.95)',
+              backgroundColor: 'rgba(94, 234, 212, 0.12)',
+              pointRadius: 3,
+              fill: true,
+            },
+            {
+              label: 'Amount (R)',
+              data: amounts,
+              yAxisID: 'y1',
+              tension: 0.3,
+              borderColor: 'rgba(127, 140, 255, 0.95)',
+              backgroundColor: 'rgba(127, 140, 255, 0.10)',
+              pointRadius: 3,
+              fill: true,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#e6eef8' } },
+            y: {
+              type: 'linear',
+              position: 'left',
+              ticks: { color: '#e6eef8' },
+              grid: { color: 'rgba(255,255,255,0.03)' }
+            },
+            y1: {
+              type: 'linear',
+              position: 'right',
+              grid: { drawOnChartArea: false },
+              ticks: { color: '#e6eef8' }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#e6eef8' } },
+            tooltip: { mode: 'index', intersect: false }
+          }
+        }
+      });
+
+      // optional: timeRange control to slice raw data. Keep simple for now.
+      document.getElementById('timeRange').addEventListener('change', function(){
+        const months = parseInt(this.value,10);
+        const sliceLabels = labels.slice(-months);
+        const sliceCounts = counts.slice(-months);
+        const sliceAmounts = amounts.slice(-months);
+        chart.data.labels = sliceLabels;
+        chart.data.datasets[0].data = sliceCounts;
+        chart.data.datasets[1].data = sliceAmounts;
+        chart.update();
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

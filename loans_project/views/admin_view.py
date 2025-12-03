@@ -19,3 +19,18 @@ def admin_page(request):
 
 def admin_applications(request):
     return render(request, "admin/applications.html")
+
+def admin_portfolio(request):
+    return render(request, "admin/portfolio.html")
+
+def service_providers(request):
+    return render(request, "admin/service_providers.html")
+
+def admin_disbursements(request):
+    return render(request, "admin/disbursement.html")
+
+def user_management(request):
+    return render(request, "admin/user_management.html")
+
+def admin_dispute_management(request):
+    return render(request, "admin/dispute_management.html")

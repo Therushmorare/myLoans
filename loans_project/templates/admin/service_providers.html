@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nexus Finance | Service Providers</title>
+
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/portfolio.css' %}" rel="stylesheet">
+
+</head>
+<body id="page-top">
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
+
+            <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
+               href="{% url 'dashboard' %}">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="sidebar-brand-text mx-2 fw-bold">Nexus Finance</div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading small text-muted text-uppercase">
+                Menu
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard Overview</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Applications</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Portfolio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-users"></i>
+                    <span>Service Providers</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Disbursements</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-cog"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Feedback</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account</span>
+                </a>
+            </li>
+
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End Sidebar -->
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white shadow mb-4 topbar">
+
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto">
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown">
+                                <span class="mr-2 text-gray-700 small fw-semibold">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+
+                                <a class="dropdown-item" href="{% url 'account' %}">
+                                    <i class="fas fa-user mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+                </nav>
+
+                <div class="container-fluid">
+
+            <!-- Heading -->
+            <div class="d-flex flex-wrap justify-content-between align-items-start mb-4">
+                <div>
+                    <h2 class="page-title mb-0">Service Provider</h2>
+                    <div class="text-muted small mt-1">
+                        Partner providers for online services such as gas, food orders, and taxi fare.
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-3 mt-md-0">
+                    <button id="exportCsv" class="btn btn-outline-dark btn-sm">
+                        <i class="fa fa-file-csv me-1"></i> Export CSV
+                    </button>
+                    <a href="#" class="btn btn-danger btn-sm">New Provider</a>
+                </div>
+            </div>
+
+            <!-- FILTERS -->
+            <div class="p-3 bg-white rounded shadow-sm mb-4">
+                <div class="row g-3">
+
+                    <div class="col-md-3 col-12">
+                        <input id="filterSearch" type="search" class="form-control" 
+                            placeholder="Search provider, id or phone">
+                    </div>
+
+                    <div class="col-md-2 col-6">
+                        <select id="filterStatus" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Active">Active</option>
+                            <option value="InActive">In-Active</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 col-6">
+                        <input id="filterStart" type="date" class="form-control">
+                    </div>
+
+                    <div class="col-md-2 col-6">
+                        <input id="filterEnd" type="date" class="form-control">
+                    </div>
+
+                    <div class="col-md-1 col-6">
+                        <input id="filterMin" type="number" class="form-control" placeholder="Min">
+                    </div>
+
+                    <div class="col-md-1 col-6">
+                        <input id="filterMax" type="number" class="form-control" placeholder="Max">
+                    </div>
+
+                    <div class="col-md-1 col-12 d-grid">
+                        <button id="clearFilters" class="btn btn-outline-secondary">
+                            Clear
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="card border-0 shadow-sm">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="loansTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Provider ID</th>
+                                <th>Provider Name</th>
+                                <th>Phone</th>
+                                <th>Service Type</th>
+                                <th>Joined Date</th>
+                                <th>Status</th>
+                                <th style="width: 120px;">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>PRS-1127</td>
+                                <td>MR D Foods</td>
+                                <td>018 112 3344</td>
+                                <td>Food Orders</td>
+                                <td>2025-11-15</td>
+                                <td><span class="badge bg-primary text-light">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-light">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+        </div>
+        </div>
+        </body>
+        </html>

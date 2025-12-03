@@ -240,8 +240,7 @@
                                         <span class="badge bg-warning text-dark">Pending</span>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-success">Approve</button>
-                                        <button class="btn btn-sm btn-danger">Reject</button>
+                                        <button class="btn btn-sm btn-success">View</button>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -281,6 +280,8 @@
                                     <th>Amount Requested</th>
                                     <th>Date</th>
                                     <th>Status</th>
+                                    <th>Actions</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -299,6 +300,9 @@
                                         {% else %}
                                         <span class="badge bg-warning text-dark">Pending</span>
                                         {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success">View</button>
                                     </td>
                                 </tr>
                                 {% endfor %}

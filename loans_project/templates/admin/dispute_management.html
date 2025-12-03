@@ -1,0 +1,416 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nexus Finance | User Management</title>
+
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/portfolio.css' %}" rel="stylesheet">
+
+</head>
+<body id="page-top">
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
+
+            <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
+               href="{% url 'dashboard' %}">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="sidebar-brand-text mx-2 fw-bold">Nexus Finance</div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading small text-muted text-uppercase">
+                Menu
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard Overview</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Applications</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Portfolio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-users"></i>
+                    <span>Service Providers</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Disbursements</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-cog"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Feedback</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account</span>
+                </a>
+            </li>
+
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End Sidebar -->
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white shadow mb-4 topbar">
+
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto">
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown">
+                                <span class="mr-2 text-gray-700 small fw-semibold">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+
+                                <a class="dropdown-item" href="{% url 'account' %}">
+                                    <i class="fas fa-user mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+                </nav>
+
+        <div class="container-fluid">
+
+            <!-- Heading -->
+            <div class="d-flex flex-wrap justify-content-between align-items-start mb-4">
+                <div>
+                    <h2 class="page-title mb-0">Feedback & Dispute Management</h2>
+                    <div class="text-muted small mt-1">
+                        Review, resolve, and manage user disputes, complaints, and feedback.
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-3 mt-md-0">
+                    <button id="exportCsv" class="btn btn-outline-dark btn-sm">
+                        <i class="fa fa-file-csv me-1"></i> Export CSV
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs mb-3" id="feedbackTabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#disputesPane" type="button">Disputes</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#complaintsPane" type="button">Complaints</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#feedbackPane" type="button">Feedback</button>
+                </li>
+            </ul>
+
+
+            <div class="tab-content">
+
+                <!-- DISPUTES TAB -->
+                <div class="tab-pane fade show active" id="disputesPane">
+
+                    <!-- Filters -->
+                    <div class="card border-0 shadow-sm mb-3 p-3">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <input type="search" class="form-control" placeholder="Search name, ID or case number">
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select">
+                                    <option value="">All Status</option>
+                                    <option>Pending</option>
+                                    <option>In Review</option>
+                                    <option>Resolved</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-outline-dark w-100">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Case ID</th>
+                                        <th>User</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Submitted</th>
+                                        <th>Status</th>
+                                        <th style="width: 150px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>DSP-4411</td>
+                                        <td>Sipho Ndlovu</td>
+                                        <td>Loan Overcharge</td>
+                                        <td>Customer disputes incorrect interest applied.</td>
+                                        <td>2025-11-20</td>
+                                        <td><span class="badge bg-warning">In Review</span></td>
+                                        <td>
+                                            <select class="form-select form-select-sm">
+                                                <option>Pending</option>
+                                                <option selected>In Review</option>
+                                                <option>Resolved</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>DSP-3320</td>
+                                        <td>Lerato Molefe</td>
+                                        <td>Wrong Provider Charge</td>
+                                        <td>Charged by Uber incorrectly.</td>
+                                        <td>2025-11-19</td>
+                                        <td><span class="badge bg-success">Resolved</span></td>
+                                        <td>
+                                            <select class="form-select form-select-sm">
+                                                <option>Pending</option>
+                                                <option>In Review</option>
+                                                <option selected>Resolved</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <!-- COMPLAINTS TAB -->
+                <div class="tab-pane fade" id="complaintsPane">
+
+                    <div class="card border-0 shadow-sm mb-3 p-3">
+                        <input type="search" class="form-control" placeholder="Search complaints...">
+                    </div>
+
+                    <div class="card border-0 shadow-sm">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Complaint ID</th>
+                                        <th>User</th>
+                                        <th>Category</th>
+                                        <th>Message</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th style="width: 150px;">Actions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>CMP-1102</td>
+                                        <td>Mpho Duma</td>
+                                        <td>App Issue</td>
+                                        <td>App keeps freezing on login.</td>
+                                        <td>2025-11-15</td>
+                                        <td><span class="badge bg-warning">Pending</span></td>
+                                        <td>
+                                            <select class="form-select form-select-sm">
+                                                <option selected>Pending</option>
+                                                <option>In Review</option>
+                                                <option>Resolved</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>CMP-1108</td>
+                                        <td>Nelisiwe Khumalo</td>
+                                        <td>Loan Issue</td>
+                                        <td>Loan disbursement delayed.</td>
+                                        <td>2025-11-14</td>
+                                        <td><span class="badge bg-success">Resolved</span></td>
+                                        <td>
+                                            <select class="form-select form-select-sm">
+                                                <option>Pending</option>
+                                                <option>In Review</option>
+                                                <option selected>Resolved</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <!-- FEEDBACK TAB -->
+                <div class="tab-pane fade" id="feedbackPane">
+
+                    <div class="card border-0 shadow-sm mb-3 p-3">
+                        <input type="search" class="form-control" placeholder="Search feedback...">
+                    </div>
+
+                    <div class="card border-0 shadow-sm">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Feedback ID</th>
+                                        <th>User</th>
+                                        <th>Rating</th>
+                                        <th>Comment</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>FDB-2211</td>
+                                        <td>Karabo Nkosi</td>
+                                        <td>⭐⭐⭐⭐⭐</td>
+                                        <td>Great experience, quick payouts!</td>
+                                        <td>2025-11-10</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>FDB-2215</td>
+                                        <td>Precious Mokoena</td>
+                                        <td>⭐⭐⭐</td>
+                                        <td>Good but customer service was slow.</td>
+                                        <td>2025-11-12</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- end tabs content -->
+
+        </div>
+
+        </div>
+    </div>
+</div>
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+</body>
+</html>
