@@ -25,7 +25,7 @@
         <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
 
             <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
-               href="{% url 'dashboard' %}">
+               href="{% url 'admin_dashboard' %}">
                 <div class="sidebar-brand-icon">
                     <i class="fas fa-landmark"></i>
                 </div>
@@ -35,7 +35,7 @@
             <hr class="sidebar-divider my-0">
 
             <li class="nav-item active">
-                <a class="nav-link" href="{% url 'dashboard' %}">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
                     <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
@@ -48,49 +48,49 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard Overview</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'admin_applications' %}">
                     <i class="fas fa-file-alt"></i>
                     <span>Applications</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'admin_portfolio' %}">
                     <i class="fas fa-chart-line"></i>
                     <span>Portfolio</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'service_providers' %}">
                     <i class="fas fa-users"></i>
                     <span>Service Providers</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'admin_disbursements' %}">
                     <i class="fas fa-hand-holding-usd"></i>
                     <span>Disbursements</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'user_management' %}">
                     <i class="fas fa-user-cog"></i>
                     <span>User Management</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'admin_dispute_management' %}">
                     <i class="fas fa-comment-dots"></i>
                     <span>Feedback</span>
                 </a>

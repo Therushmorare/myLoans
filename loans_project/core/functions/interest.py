@@ -19,46 +19,69 @@ def interest_checker_job(user_id):
     except Exception as e:
         print(f"Could not calculate loan interest: {e}")
         return False
-    
+
 def calculate_interest(loan_id):
     try:
         loan = Loan.objects.filter(loan_id=loan_id).first()
         if not loan:
             return None
-        
-        # convert stored values
-        principal = Decimal(loan.amount)
-        rate = Decimal(loan.loan_interest) / Decimal(100) 
-        duration_months = int(loan.loan_duration)
 
-        # check existing interest record
+        # No money sent → no interest
+        if not loan.disbursed_at:
+            return None
+
+        principal = Decimal(loan.amount)
+        annual_rate = Decimal(loan.interest_rate) / Decimal(100)
+        daily_rate = annual_rate / Decimal(365)
+
+        # Interest record
         interest, created = Interest.objects.get_or_create(
             loan_id=loan.loan_id,
             user=loan.user,
-            defaults={"incurred_amount": Decimal(0)}
+            defaults={
+                "incurred_amount": Decimal("0.00"),
+                "last_calculated_at": loan.disbursed_at
+            }
         )
 
-        # compound interest (monthly compounding assumed)
-        t = duration_months / 12
-        total_interest = principal * ((1 + rate / 12) ** (12 * t) - 1)
+        # HARD GUARD FOR OLD LOANS
+        if interest.last_calculated_at < loan.disbursed_at:
+            interest.last_calculated_at = loan.disbursed_at
+            interest.incurred_amount = Decimal("0.00")
+            interest.save()
 
-        # update incurred interest
-        interest.incurred_amount = total_interest
+        last_calc = interest.last_calculated_at
+        today = now()
+
+        if today <= last_calc:
+            return interest
+
+        days_elapsed = (today - last_calc).days
+        if days_elapsed <= 0:
+            return interest
+
+        # Daily simple interest
+        new_interest = principal * daily_rate * Decimal(days_elapsed)
+
+        interest.incurred_amount += new_interest
+        interest.last_calculated_at = today
         interest.save()
 
-        # total repayments
+        # repayments
         repayments = Repayment.objects.filter(loan=loan)
-        repaid_total = sum([r.amount for r in repayments], Decimal(0))
+        repaid_total = sum((r.amount for r in repayments), Decimal("0.00"))
 
-        # check due date (applied_at + duration)
-        due_date = loan.applied_at + timedelta(days=30 * duration_months)
-        if now() > due_date and repaid_total < (principal + total_interest):
-            # escalate to handover
+        total_due = principal + interest.incurred_amount
+
+        # due date from DISBURSEMENT
+        due_date = loan.disbursed_at + timedelta(days=30 * loan.duration_months)
+
+        if today > due_date and repaid_total < total_due:
             Handover.objects.get_or_create(
                 loan=loan,
                 user=loan.user,
                 defaults={
-                    "amount": (principal + total_interest) - repaid_total,
+                    "amount": total_due - repaid_total,
                     "status": "OPEN"
                 }
             )
@@ -66,5 +89,5 @@ def calculate_interest(loan_id):
         return interest
 
     except Exception as e:
-        print(f"Could not check for interest: {e}")
+        print(f"Could not calculate interest: {e}")
         return None
