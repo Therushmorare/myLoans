@@ -5,6 +5,7 @@ from django.utils.timezone import now
 from loans_project.models.loans import Loan
 from loans_project.models.disbursements import Disbursments
 from loans_project.models.admin import AdminUser
+from loans_project.models.client_wallet import Wallet
 import uuid
 from django.db import transaction
 from loans_project.core.functions.logs import log_user_activity
@@ -30,11 +31,19 @@ def make_disbursement(admin_id, loan_id, status):
                 'message': f'Loan cannot be disbursed in {loan.status} state'
             }, 400
 
+        wallet = Wallet.objects.select_for_update().filter(user_id=loan.user).first()
+        if not wallet:
+            return {'message': 'Client has not added a wallet yet'}, 404
+        
         with transaction.atomic():
 
             # update loan
             loan.disbursed_at = now()
             loan.save()
+
+            #update wallet
+            wallet.balance += Decimal(loan.amount)
+            wallet.save()
 
             # create disbursement record
             Disbursments.objects.create(

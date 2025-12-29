@@ -5,7 +5,8 @@ import uuid
 from django.db import transaction
 from loans_project.core.functions.logs import log_user_activity
 from loans_project.models.service_provider import ServiceProvider
-
+from loans_project.core.functions.string_gen import generate_random_string
+from loans_project.email_sender.mail_helpers import send_credentials_email
 """
 Add a new service provider
 """
@@ -34,6 +35,7 @@ def add_service_provider(admin_id, provider_name, email, phone, provider_type, a
             }, 400
 
         provider_id = str(uuid.uuid4())
+        password = generate_random_string(10)
 
         with transaction.atomic():
             provider = ServiceProvider.objects.create(
@@ -44,8 +46,12 @@ def add_service_provider(admin_id, provider_name, email, phone, provider_type, a
                 phone=phone,
                 provider_type=provider_type,
                 address=address,
+                password=password,
                 status="PENDING"
             )
+
+            #send email
+            send_credentials_email(email, password)
 
             log_user_activity(
                 admin_id,
@@ -63,6 +69,7 @@ def add_service_provider(admin_id, provider_name, email, phone, provider_type, a
                 "phone": provider.phone,
                 "provider_type": provider.provider_type,
                 "address": provider.address,
+                "password": password,
                 "added_by": admin.email
             }
         }, 200

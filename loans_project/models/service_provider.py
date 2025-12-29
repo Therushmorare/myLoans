@@ -13,5 +13,6 @@ class ServiceProvider(models.Model):
     phone = models.CharField()
     type = models.CharField()
     address = models.TextField()
+    password = models.CharField()
     status = models.CharField()
     created_at = models.DateTimeField(auto_now_add=True)
