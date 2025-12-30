@@ -5,3 +5,4 @@
 9, Service provider authentication
 11, Make comprehensive user profile
 12, Make CRUD actions for every app activity
+13, Make templates (email)
