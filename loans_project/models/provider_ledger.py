@@ -11,6 +11,8 @@ class ProviderLedger(models.Model):
         ("QR_PAYMENT", "QR Payment"),
         ("MANUAL_ADJUSTMENT", "Manual Adjustment"),
         ("MONTHLY_PAYOUT", "Monthly Payout"),
+        ("PAYOUT", "Payout"),
+        ("PAYOUT_REQUEST", "Payout Request"),
         ("REVERSAL", "Reversal"),
     )
 

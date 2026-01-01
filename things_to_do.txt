@@ -1,8 +1,6 @@
-1, Generate custom virtual cards for each user with unique pay ID
-6, Make dispute management
-7, User management
 8, Service provider platform
 9, Service provider authentication
 11, Make comprehensive user profile
 12, Make CRUD actions for every app activity
 13, Make templates (email)
+14, Add logs for every admin activity
