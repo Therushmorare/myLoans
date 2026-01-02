@@ -4,6 +4,7 @@ from django.contrib import messages
 from loans_project.models.client import Client
 from loans_project.core.clients import auth
 
+#login
 def login_view(request):
     if request.method == "POST":
         email = request.POST.get("email")
@@ -54,6 +55,7 @@ def signup_view(request):
 
     return render(request, "clients/signup.html")
 
+#forgot password
 def forgot_pass_view(request):
     if request.method == "POST":
         email = request.POST.get("email")
@@ -64,6 +66,7 @@ def forgot_pass_view(request):
     
     return render(request, "clients/forgot.html")
 
+#logout
 def logout_view(request):
     logout(request)
     return redirect("login")
