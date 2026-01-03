@@ -7,7 +7,7 @@ Loan package approval or reject method
 
 def approve_or_reject_loan_package(admin_id, package_id, status, comments=None):
     try:
-        admin = AdminUser.objects.filter(id=admin_id, is_active=True).first()
+        admin = AdminUser.objects.filter(id=admin_id).first()
         if not admin:
             return {'message': 'User not authorized'}, 403
 

@@ -9,7 +9,7 @@ Add a new service product
 
 def add_new_service(admin_id, service_name, description, percentage, duration, offering_amount):
     try:
-        admin = AdminUser.objects.filter(id=admin_id, is_active=True).first()
+        admin = AdminUser.objects.filter(id=admin_id).first()
 
         if not admin:
             return {'message': 'User does not have permission to perform this action'}, 403

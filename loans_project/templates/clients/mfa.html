@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible"content="IE=edge"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles/signin.css' %}">
+    <title>Nexus Financing | MFA</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fefefe, #ffe5e5);
+        }
+        .login-card {
+            max-width: 420px;
+            width: 100%;
+            border-radius: 25px;
+            padding: 2.5rem;
+            background: #fff;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        .login-logo i { font-size: 60px; color: #dc3545; }
+        .login-title { margin-top: 1rem; font-weight: 700; color: #dc3545; font-size: 1.5rem; }
+        .btn-login { background: linear-gradient(120deg, #dc3545, #e4606d); color: #fff; border-radius: 50px; font-weight: 600; }
+        .btn-login:hover { transform: scale(1.05); background: linear-gradient(120deg, #e4606d, #dc3545); }
+        .link-secondary { color: #dc3545; font-weight: 500; }
+        .link-secondary:hover { color: #e4606d; text-decoration: underline; }
+        @media (max-width: 576px) { .login-card { padding: 2rem; } .login-title { font-size: 1.3rem; } }
+    </style>
+</head>
+
+<body>
+<div class="container d-flex align-items-center justify-content-center min-vh-100 px-3">
+    <div class="login-card">
+        <form class="needs-validation" novalidate method="POST" action="{% url 'mfa_page' %}" autocomplete="off">
+            {% csrf_token %}
+
+            <div class="text-center login-logo mb-4">
+                <i class="fas fa-landmark"></i>
+                <div class="login-title">MFA Verification</div>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- MFA Code Input -->
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="mfaCode" name="code" placeholder="Enter MFA code" required>
+                <label for="mfaCode">Enter MFA Code</label>
+                <div class="invalid-feedback">Please enter the MFA code sent to your email.</div>
+            </div>
+
+            <div class="d-grid mb-3">
+                <button class="btn btn-login btn-lg fw-bold" type="submit">Verify</button>
+            </div>
+
+            <div class="text-center mb-2">
+                <a href="{% url 'login' %}" class="link-secondary">Back to Login</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+(() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+</body>
+</html>

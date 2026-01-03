@@ -1,3 +1,4 @@
 pip install boto3 django-storages python-decouple
 pip install celery redis
 pip install qrcode[pil]
+background_task

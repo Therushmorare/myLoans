@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from loans_project.views.auth_view import signup_view, login_view, logout_view, forgot_pass_view
+from loans_project.views.auth_view import signup_view, login_view, logout_view, forgot_pass_view, mfa_view
 from loans_project.views.client_views import *
 from loans_project.views.admin_view import *
 from django.conf import settings
@@ -29,6 +29,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('forgot/', forgot_pass_view, name='forgot'),
+    path('mfa/', mfa_view, name='mfa_page'),
 
     # Use UUID converter for user/client IDs
     path('dashboard/', client_dashboard, name='dashboard'),

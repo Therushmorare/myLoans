@@ -7,7 +7,7 @@ Delete loan package
 """
 def delete_loan_package(admin_id, package_id):
     try:
-        admin = AdminUser.objects.filter(id=admin_id, is_active=True).first()
+        admin = AdminUser.objects.filter(id=admin_id).first()
         if not admin:
             return {'message': 'User not authorized to perform this action'}, 403
 

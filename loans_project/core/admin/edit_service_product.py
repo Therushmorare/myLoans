@@ -9,7 +9,7 @@ Edit service product
 
 def edit_service_product(admin_id, package_id, service_name=None, description=None, percentage=None, duration=None, offering_amount=None):
     try:
-        admin = AdminUser.objects.filter(id=admin_id, is_active=True).first()
+        admin = AdminUser.objects.filter(id=admin_id).first()
         if not admin:
             return {'message': 'User does not have permission to perform this action'}, 403
 
