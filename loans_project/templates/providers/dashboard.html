@@ -1,0 +1,246 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Nexus Finance | Service Provider Dashboard</title>
+
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- Core Styles -->
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/glassmorph.css' %}" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+<div id="wrapper">
+
+    <!-- SIDEBAR -->
+    <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
+
+        <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
+           href="{% url 'admin_dashboard' %}">
+            <div class="sidebar-brand-icon">
+                <i class="fas fa-landmark"></i>
+            </div>
+            <div class="sidebar-brand-text mx-2 fw-bold">Nexus Finance</div>
+        </a>
+
+        <hr class="sidebar-divider my-0">
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+        </li>
+
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-heading small text-muted text-uppercase">
+            Management
+        </div>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_applications' %}">
+                <i class="fas fa-file-alt"></i>
+                <span>Loan Transactions</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_portfolio' %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Financial Statements</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'service_providers' %}">
+                <i class="fas fa-wallet"></i>
+                <span>Earnings Wallet</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-user-circle"></i>
+                <span>Account</span>
+            </a>
+        </li>
+
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT WRAPPER -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+
+            <!-- TOPBAR -->
+            <nav class="navbar navbar-expand navbar-light bg-white shadow mb-4 topbar">
+
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <ul class="navbar-nav ml-auto">
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown"
+                           role="button" data-toggle="dropdown">
+                            <span class="mr-2 text-gray-700 small font-weight-bold">
+                                {{ user.first_name }} {{ user.last_name }}
+                            </span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+                            <a class="dropdown-item" href="{% url 'account' %}">
+                                <i class="fas fa-user mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cogs mr-2 text-gray-400"></i>
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <!-- END TOPBAR -->
+
+            <!-- PAGE CONTENT -->
+            <div class="container-fluid">
+
+                <!-- PAGE HEADER -->
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h1 class="h3 text-gray-800 mb-0">Service Provider Dashboard</h1>
+                        <p class="text-muted small mt-1">
+                            Overview of your loan activity, earnings, and performance.
+                        </p>
+                    </div>
+
+                    <a href="{% url 'selectLoanType' %}" class="btn btn-danger shadow-sm">
+                        <i class="fas fa-plus"></i>&nbsp; Add New Product
+                    </a>
+                </div>
+
+                <!-- MESSAGES -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- FINANCIAL STATS -->
+                <div class="row g-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="glass-card">
+                            <div class="glass-label">Transaction Avg</div>
+                            <div class="glass-value">R{{ total_loans|default:"0.00" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="glass-card">
+                            <div class="glass-label">Outstanding</div>
+                            <div class="glass-value">R{{ total_owing|default:"0.00" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="glass-card">
+                            <div class="glass-label">Received</div>
+                            <div class="glass-value">R{{ total_paid|default:"0.00" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="glass-card">
+                            <div class="glass-label">Successful Transactions</div>
+                            <div class="glass-value">R{{ interest_to_pay|default:"0.00" }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- APPLICATION STATS -->
+                <div class="row g-4 mt-3">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="glass-card">
+                            <div class="glass-label">Failed Transactions</div>
+                            <div class="glass-value">{{ total_applications|default:"0" }}</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CHARTS -->
+                <div class="row mt-4">
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-dark">
+                                    Interest Incurred Over Time
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="myAreaChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-dark">
+                                    Application Outcomes
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END PAGE CONTENT -->
+
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+</body>
+</html>

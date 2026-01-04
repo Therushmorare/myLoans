@@ -1,0 +1,288 @@
+{% load static, humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Nexus Finance | Account</title>
+
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- Core Styles -->
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/glassmorph.css' %}" rel="stylesheet">
+
+    <style>
+        .stat-card {
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1f2933, #111827);
+            color: #fff;
+        }
+        .stat-card h6 {
+            opacity: 0.8;
+        }
+        .table thead th {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .badge-credit {
+            background-color: #16a34a;
+        }
+        .badge-debit {
+            background-color: #dc2626;
+        }
+    </style>
+</head>
+
+<body id="page-top" class="bg-light">
+
+<div id="wrapper">
+    <!-- SIDEBAR -->
+    <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
+
+        <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
+           href="{% url 'admin_dashboard' %}">
+            <div class="sidebar-brand-icon">
+                <i class="fas fa-landmark"></i>
+            </div>
+            <div class="sidebar-brand-text mx-2 fw-bold">Nexus Finance</div>
+        </a>
+
+        <hr class="sidebar-divider my-0">
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+        </li>
+
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-heading small text-muted text-uppercase">
+            Management
+        </div>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_applications' %}">
+                <i class="fas fa-file-alt"></i>
+                <span>Loan Transactions</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_portfolio' %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Financial Statements</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'service_providers' %}">
+                <i class="fas fa-wallet"></i>
+                <span>Earnings Wallet</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-user-circle"></i>
+                <span>Account</span>
+            </a>
+        </li>
+
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- END SIDEBAR -->
+
+<div id="content-wrapper" class="d-flex flex-column">
+    <div class="content">
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="page-title mb-0">{{ provider.provider_name }}</h2>
+            <div class="text-muted small">
+                Manage your account details and uploaded documents.
+            </div>
+        </div>
+
+        <div>
+            <button class="btn btn-outline-light btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editProfileModal">
+                Edit Profile
+            </button>
+            <button class="btn btn-danger btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#uploadFileModal">
+                Upload Document
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Details -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="glass-label">Provider ID</div>
+                <div class="glass-value">{{ provider.provider_id }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="glass-label">Email</div>
+                <div class="glass-value">{{ provider.email }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="glass-label">Phone</div>
+                <div class="glass-value">{{ provider.phone }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="glass-label">Type</div>
+                <div class="glass-value">{{ provider.type }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="glass-card">
+                <div class="glass-label">Address</div>
+                <div class="glass-value">{{ provider.address }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="glass-label">Status</div>
+                <div class="glass-value">{{ provider.status }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="glass-label">Wallet Balance</div>
+                <div class="glass-value">R{{ wallet.balance|default:"0.00" }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="glass-card">
+                <div class="glass-label">Joined On</div>
+                <div class="glass-value">{{ provider.created_at|date:"d/m/Y" }}</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Documents -->
+    <h5>Documents</h5>
+    <div class="row g-3">
+        {% for file in files %}
+            <div class="col-md-3">
+                <div class="glass-card p-2 text-center">
+                    <a href="{{ file.document }}" target="_blank">
+                        <img src="{% static 'images/file-icon.png' %}" width="50">
+                    </a>
+                    <div class="small mt-2">{{ file.document|slice:":30" }}{% if file.document|length > 30 %}...{% endif %}</div>
+                    <div class="text-muted small">{{ file.uploaded_at|date:"d/m/Y" }}</div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted small">No documents uploaded yet.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="post" action="{% url 'service_provider_update_profile' provider.id %}" class="modal-content glass-card">
+            {% csrf_token %}
+
+            <div class="modal-header border-0">
+                <h5>Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Provider Name</label>
+                    <input name="provider_name" class="form-control" value="{{ provider.provider_name }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input name="email" class="form-control" value="{{ provider.email }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input name="phone" class="form-control" value="{{ provider.phone }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <textarea name="address" class="form-control">{{ provider.address }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password (Leave blank to keep current)</label>
+                    <input name="password" type="password" class="form-control">
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button class="btn btn-danger btn-sm">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="uploadFileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="post" action="{% url 'service_provider_upload_file' provider.id %}" enctype="multipart/form-data" class="modal-content glass-card">
+            {% csrf_token %}
+
+            <div class="modal-header border-0">
+                <h5>Upload Document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Select File</label>
+                    <input type="file" name="document" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button class="btn btn-danger btn-sm">Upload</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    </div>
+</div>
+</div>
+</body>
+</html>

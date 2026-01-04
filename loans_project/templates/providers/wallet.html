@@ -1,0 +1,335 @@
+{% load static, humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Nexus Finance | Service Provider Wallet</title>
+
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- Core Styles -->
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/glassmorph.css' %}" rel="stylesheet">
+
+    <style>
+        .stat-card {
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1f2933, #111827);
+            color: #fff;
+        }
+        .stat-card h6 {
+            opacity: 0.8;
+        }
+        .table thead th {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .badge-credit {
+            background-color: #16a34a;
+        }
+        .badge-debit {
+            background-color: #dc2626;
+        }
+    </style>
+</head>
+
+<body id="page-top" class="bg-light">
+
+<div id="wrapper">
+    <!-- SIDEBAR -->
+    <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
+
+        <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
+           href="{% url 'admin_dashboard' %}">
+            <div class="sidebar-brand-icon">
+                <i class="fas fa-landmark"></i>
+            </div>
+            <div class="sidebar-brand-text mx-2 fw-bold">Nexus Finance</div>
+        </a>
+
+        <hr class="sidebar-divider my-0">
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+        </li>
+
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-heading small text-muted text-uppercase">
+            Management
+        </div>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_applications' %}">
+                <i class="fas fa-file-alt"></i>
+                <span>Loan Transactions</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_portfolio' %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Financial Statements</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'service_providers' %}">
+                <i class="fas fa-wallet"></i>
+                <span>Earnings Wallet</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-user-circle"></i>
+                <span>Account</span>
+            </a>
+        </li>
+
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- END SIDEBAR -->
+
+<div id="content-wrapper" class="d-flex flex-column">
+    <div class="content">
+    <div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="page-title mb-0">Provider Wallet</h2>
+            <div class="text-muted small">
+                Manage provider banking details and wallet status.
+            </div>
+        </div>
+
+        {% if wallet %}
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-light btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editWalletModal">
+                    Edit Wallet
+                </button>
+
+                <button class="btn btn-outline-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteWalletModal">
+                    Delete Wallet
+                </button>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if not wallet %}
+        <!-- EMPTY STATE -->
+        <div class="glass-card text-center py-5">
+            <h5 class="mb-2">No Wallet Found</h5>
+            <p class="text-muted small mb-3">
+                This provider does not have a wallet yet.
+            </p>
+            <button class="btn btn-danger btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#createWalletModal">
+                Create Wallet
+            </button>
+        </div>
+
+    {% else %}
+        <!-- WALLET DETAILS -->
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="glass-label">Provider ID</div>
+                    <div class="glass-value">{{ wallet.provider_id }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="glass-label">Bank</div>
+                    <div class="glass-value">{{ wallet.bank }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="glass-label">Account Number</div>
+                    <div class="glass-value">{{ wallet.account_number }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="glass-label">Account Type</div>
+                    <div class="glass-value">{{ wallet.account_type }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="glass-label">Balance</div>
+                    <div class="glass-value">R {{ wallet.balance }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <div class="glass-label">Status</div>
+                    <div class="glass-value">{{ wallet.status }}</div>
+                </div>
+            </div>
+
+        </div>
+    {% endif %}
+
+</div><!--here-->
+
+    </div>
+</div>
+
+</div>
+
+<div class="modal fade" id="createWalletModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="post" action="{% url 'create_wallet' %}" class="modal-content glass-card">
+            {% csrf_token %}
+
+            <div class="modal-header border-0">
+                <h5>Create Wallet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" name="provider_id" value="{{ provider_id }}">
+
+                <div class="mb-3">
+                    <label class="form-label">Bank</label>
+                    <input name="bank" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Account Type</label>
+                    <input name="account_type" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Account Number</label>
+                    <input name="account_number" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="INCOMPLETE">Incomplete</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="SUSPENDED">Suspended</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button class="btn btn-danger btn-sm">Create Wallet</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="editWalletModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="post" action="{% url 'update_wallet' wallet.id %}" class="modal-content glass-card">
+            {% csrf_token %}
+
+            <div class="modal-header border-0">
+                <h5>Edit Wallet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label">Bank</label>
+                    <input name="bank" class="form-control" value="{{ wallet.bank }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Account Type</label>
+                    <input name="account_type" class="form-control" value="{{ wallet.account_type }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Account Number</label>
+                    <input name="account_number" class="form-control" value="{{ wallet.account_number }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="ACTIVE" {% if wallet.status == "ACTIVE" %}selected{% endif %}>Active</option>
+                        <option value="SUSPENDED" {% if wallet.status == "SUSPENDED" %}selected{% endif %}>Suspended</option>
+                        <option value="CLOSED" {% if wallet.status == "CLOSED" %}selected{% endif %}>Closed</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="modal-footer border-0">
+                <button class="btn btn-outline-light btn-sm">Save Changes</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteWalletModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="post" action="{% url 'delete_wallet' wallet.id %}" class="modal-content glass-card">
+            {% csrf_token %}
+
+            <div class="modal-body text-center">
+                <h5 class="mb-2">Delete Wallet?</h5>
+                <p class="text-muted small">
+                    This action cannot be undone.
+                </p>
+
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button class="btn btn-danger btn-sm">
+                        Delete
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- JS -->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+</body>
+</html>

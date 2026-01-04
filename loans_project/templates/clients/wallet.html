@@ -178,84 +178,96 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="{% url 'selectLoanType' %}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i
-                                class="fas fa-file fa-sm text-white-50"></i>&nbsp;Apply For Loan</a>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row justify-content-center">
-                    <div class="container mt-5">
-                        <div class="card shadow-lg p-4" style="max-width: 700px; margin:auto; border-radius: 20px;">
-                            <div class="text-center mb-4">
-                                <h3 class="fw-bold text-danger">{{ user.first_name }} {{ user.last_name }}</h3>
-                                <p class="text-muted">Profile Overview</p>
-                                {% if user.is_verified %}
-                                    <span class="badge bg-success">Verified</span>
-                                {% else %}
-                                    <span class="badge bg-warning text-dark">Unverified</span>
-                                {% endif %}
-                                {% if user.is_active %}
-                                    <span class="badge bg-primary text-white-50">Active</span>
-                                {% else %}
-                                    <span class="badge bg-secondary text-white-50">Inactive</span>
-                                {% endif %}
-                            </div>
-
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="firstName" placeholder="First Name" value="{{ user.first_name }}" readonly>
-                                            <label for="firstName">First Name</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="{{ user.last_name }}" readonly>
-                                            <label for="lastName">Last Name</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="email" class="form-control" id="email" placeholder="Email" value="{{ user.email }}" readonly>
-                                            <label for="email">Email</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="tel" class="form-control" id="phone" placeholder="Phone Number" value="{{ user.phone_number|default:'' }}" readonly>
-                                            <label for="phone">Phone Number</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="username" placeholder="Username" value="{{ user.username }}" readonly>
-                                            <label for="username">Username</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="dateJoined" placeholder="Date Joined" value="{{ user.date_joined|date:'M d, Y H:i' }}" readonly>
-                                            <label for="dateJoined">Date Joined</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="lastLogin" placeholder="Last Login" value="{{ user.last_login|date:'M d, Y H:i' }}" readonly>
-                                            <label for="lastLogin">Last Login</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="page-title mb-0">Provider Wallet</h2>
+                        <div class="text-muted small">
+                            Manage provider banking details and wallet status.
                         </div>
                     </div>
-                    </div>
-                    <!-- Content Row -->
+
+                    {% if wallet %}
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-light btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editWalletModal">
+                                Edit Wallet
+                            </button>
+
+                            <button class="btn btn-outline-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteWalletModal">
+                                Delete Wallet
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
-                <!-- /.container-fluid -->
+
+                {% if not wallet %}
+                    <!-- EMPTY STATE -->
+                    <div class="glass-card text-center py-5">
+                        <h5 class="mb-2">No Wallet Found</h5>
+                        <p class="text-muted small mb-3">
+                            This provider does not have a wallet yet.
+                        </p>
+                        <button class="btn btn-danger btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#createWalletModal">
+                            Create Wallet
+                        </button>
+                    </div>
+
+                {% else %}
+                    <!-- WALLET DETAILS -->
+                    <div class="row g-4">
+
+                        <div class="col-md-4">
+                            <div class="glass-card">
+                                <div class="glass-label">Provider ID</div>
+                                <div class="glass-value">{{ wallet.provider_id }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="glass-card">
+                                <div class="glass-label">Bank</div>
+                                <div class="glass-value">{{ wallet.bank }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="glass-card">
+                                <div class="glass-label">Account Number</div>
+                                <div class="glass-value">{{ wallet.account_number }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="glass-card">
+                                <div class="glass-label">Account Type</div>
+                                <div class="glass-value">{{ wallet.account_type }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="glass-card">
+                                <div class="glass-label">Balance</div>
+                                <div class="glass-value">R {{ wallet.balance }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="glass-card">
+                                <div class="glass-label">Status</div>
+                                <div class="glass-value">{{ wallet.status }}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                {% endif %}
+
+            </div><!--here-->
 
             </div>
             <!-- End of Main Content -->
@@ -298,6 +310,123 @@
                     <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createWalletModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="post" action="{% url 'create_wallet' %}" class="modal-content glass-card">
+            {% csrf_token %}
+
+            <div class="modal-header border-0">
+                <h5>Create Wallet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" name="provider_id" value="{{ provider_id }}">
+
+                <div class="mb-3">
+                    <label class="form-label">Bank</label>
+                    <input name="bank" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Account Type</label>
+                    <input name="account_type" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Account Number</label>
+                    <input name="account_number" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="INCOMPLETE">Incomplete</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="SUSPENDED">Suspended</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button class="btn btn-danger btn-sm">Create Wallet</button>
+            </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editWalletModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="post" action="{% url 'update_wallet' wallet.id %}" class="modal-content glass-card">
+                {% csrf_token %}
+
+                <div class="modal-header border-0">
+                    <h5>Edit Wallet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label class="form-label">Bank</label>
+                        <input name="bank" class="form-control" value="{{ wallet.bank }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Account Type</label>
+                        <input name="account_type" class="form-control" value="{{ wallet.account_type }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Account Number</label>
+                        <input name="account_number" class="form-control" value="{{ wallet.account_number }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="ACTIVE" {% if wallet.status == "ACTIVE" %}selected{% endif %}>Active</option>
+                            <option value="SUSPENDED" {% if wallet.status == "SUSPENDED" %}selected{% endif %}>Suspended</option>
+                            <option value="CLOSED" {% if wallet.status == "CLOSED" %}selected{% endif %}>Closed</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button class="btn btn-outline-light btn-sm">Save Changes</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteWalletModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="post" action="{% url 'delete_wallet' wallet.id %}" class="modal-content glass-card">
+                {% csrf_token %}
+
+                <div class="modal-body text-center">
+                    <h5 class="mb-2">Delete Wallet?</h5>
+                    <p class="text-muted small">
+                        This action cannot be undone.
+                    </p>
+
+                    <div class="d-flex justify-content-center gap-2 mt-3">
+                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button class="btn btn-danger btn-sm">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+            </form>
         </div>
     </div>
 

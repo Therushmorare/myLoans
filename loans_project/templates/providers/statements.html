@@ -1,0 +1,259 @@
+{% load static, humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Nexus Finance | Service Provider Statements</title>
+
+    <!-- FontAwesome -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- Core Styles -->
+    <link href="{% static 'styles/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'styles/glassmorph.css' %}" rel="stylesheet">
+
+    <style>
+        .stat-card {
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1f2933, #111827);
+            color: #fff;
+        }
+        .stat-card h6 {
+            opacity: 0.8;
+        }
+        .table thead th {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .badge-credit {
+            background-color: #16a34a;
+        }
+        .badge-debit {
+            background-color: #dc2626;
+        }
+    </style>
+</head>
+
+<body id="page-top" class="bg-light">
+
+<div id="wrapper">
+    <!-- SIDEBAR -->
+    <ul class="navbar-nav sidebar sidebar-dark bg-dark" id="accordionSidebar">
+
+        <a class="sidebar-brand d-flex align-items-center justify-content-center py-3"
+           href="{% url 'admin_dashboard' %}">
+            <div class="sidebar-brand-icon">
+                <i class="fas fa-landmark"></i>
+            </div>
+            <div class="sidebar-brand-text mx-2 fw-bold">Nexus Finance</div>
+        </a>
+
+        <hr class="sidebar-divider my-0">
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+        </li>
+
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-heading small text-muted text-uppercase">
+            Management
+        </div>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_applications' %}">
+                <i class="fas fa-file-alt"></i>
+                <span>Loan Transactions</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_portfolio' %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Financial Statements</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'service_providers' %}">
+                <i class="fas fa-wallet"></i>
+                <span>Earnings Wallet</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fas fa-user-circle"></i>
+                <span>Account</span>
+            </a>
+        </li>
+
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- END SIDEBAR -->
+
+<div id="content-wrapper" class="d-flex flex-column">
+    <div class="content">
+        <div class="container-fluid px-4 py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">Financial Statements</h3>
+
+        <div>
+            <button class="btn btn-outline-dark btn-sm">
+                <i class="fas fa-file-download"></i> Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="p-4 stat-card shadow-sm">
+                <h6>Total Balance</h6>
+                <h3 class="fw-bold mt-2">
+                    R {{ total_balance|floatformat:2|intcomma }}
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-4 stat-card shadow-sm">
+                <h6>Total Credits</h6>
+                <h3 class="fw-bold mt-2 text-success">
+                    R {{ total_credits|floatformat:2|intcomma }}
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-4 stat-card shadow-sm">
+                <h6>Total Debits</h6>
+                <h3 class="fw-bold mt-2 text-danger">
+                    R {{ total_debits|floatformat:2|intcomma }}
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label">From</label>
+                    <input type="date" name="start_date" value="{{ request.GET.start_date }}" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">To</label>
+                    <input type="date" name="end_date" value="{{ request.GET.end_date }}" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Entry Type</label>
+                    <select name="entry_type" class="form-select">
+                        <option value="">All</option>
+                        <option value="CREDIT" {% if request.GET.entry_type == "CREDIT" %}selected{% endif %}>Credit</option>
+                        <option value="DEBIT" {% if request.GET.entry_type == "DEBIT" %}selected{% endif %}>Debit</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Source</label>
+                    <select name="source" class="form-select">
+                        <option value="">All</option>
+                        {% for key, label in sources %}
+                            <option value="{{ key }}" {% if request.GET.source == key %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-12 text-end">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ledger Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Reference</th>
+                        <th>Source</th>
+                        <th>Description</th>
+                        <th class="text-center">Type</th>
+                        <th class="text-end">Amount (R)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entry in ledger_entries %}
+                    <tr>
+                        <td>{{ entry.created_at|date:"Y-m-d H:i" }}</td>
+                        <td class="fw-semibold">{{ entry.reference_id }}</td>
+                        <td>{{ entry.get_source_display }}</td>
+                        <td>{{ entry.description|default:"—" }}</td>
+                        <td class="text-center">
+                            {% if entry.entry_type == "CREDIT" %}
+                                <span class="badge badge-credit">Credit</span>
+                            {% else %}
+                                <span class="badge badge-debit">Debit</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end fw-bold">
+                            {% if entry.entry_type == "DEBIT" %}-{% endif %}
+                            {{ entry.amount|floatformat:2|intcomma }}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            No financial records found.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div><!--here-->
+
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- JS -->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+</body>
+</html>
