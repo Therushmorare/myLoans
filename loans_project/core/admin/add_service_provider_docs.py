@@ -49,6 +49,13 @@ def add_provider_files(admin_id, provider_id, files_arr):
                 "document": provider_file.document
             })
 
+        # Log action
+        log_user_activity(
+            admin_id,
+            "ADMIN",
+            f"Added service provider files: {provider_id}"
+        )
+
         # Return structured response
         return {
             "message": "Files processed",

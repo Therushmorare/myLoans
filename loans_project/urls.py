@@ -31,9 +31,11 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('forgot/', forgot_pass_view, name='forgot'),
     path('mfa/', mfa_view, name='mfa_page'),
+    path('verfiy/', verify_page, name='verify'),
 
     # Use UUID converter for user/client IDs
     path('dashboard/', client_dashboard, name='dashboard'),
+    path('profile-u/', profile_update, name='profileUpdate'),
     path('select-loan-type/', loan_type, name='selectLoanType'),
     path('apply/', apply_for_loan, name='apply'),
     path('process-application/<uuid:id>', processApplication, name='processApplication'),

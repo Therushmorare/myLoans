@@ -4,6 +4,7 @@ import uuid
 import logging
 from loans_project.models.provider_wallet import ProviderWallet
 from loans_project.models.service_provider import ServiceProvider
+from loans_project.core.functions.logs import log_user_activity
 
 """
 Add service provider wallet

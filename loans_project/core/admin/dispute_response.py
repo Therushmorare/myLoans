@@ -6,7 +6,11 @@ from loans_project.models.admin import AdminUser
 from loans_project.models.disputes import Dispute, DisputeResponse
 from loans_project.models.client_wallet import Wallet
 from loans_project.models.wallet_ledger import WalletLedger
+from loans_project.core.functions.logs import log_user_activity
 
+"""
+Respond to disputes
+"""
 
 def respond_to_dispute(dispute_id, responder_id, responder_type, message):
     try:
@@ -29,6 +33,13 @@ def respond_to_dispute(dispute_id, responder_id, responder_type, message):
 
         dispute.status = "RESPONDED"
         dispute.save(update_fields=["status"])
+
+        # Log action
+        log_user_activity(
+            responder_id,
+            "Dispute Responder",
+            f"Dispute response: {dispute_id}"
+        )
 
         return {
             'message': 'Response submitted successfully',

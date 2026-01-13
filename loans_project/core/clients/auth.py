@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from loans_project.core.functions.email_senders import forgot_pass_email
+from loans_project.core.functions.ID_verify import validate_identity
 
 #login
 def user_login(request, email, password):
@@ -64,3 +65,32 @@ def user_forgot_password(request, email):
                print(f"Forgot Password Error:{e}")
                messages.error(request, 'Something went wrong, please try again later')
                return render(request, "clients/forgot.html")
+
+#Verify user
+def verify_user_account(user_id, id_number):
+    try:
+        if not id_number or len(id_number) != 13:
+            return {'message': 'Please enter a valid ID number'}, 400
+
+        user = Client.objects.filter(id=user_id).first()
+        if not user:
+            return {
+                'message': 'Cannot verify a user that does not exist, please register an account'
+            }, 404
+
+        # Validate identity (API + fallback)
+        response, status_code = validate_identity(user_id, id_number)
+
+        if status_code == 200:
+            user.is_verified = True
+            user.save(update_fields=["is_verified"])
+
+            return {'message': 'Account verified successfully'}, 200
+
+        return {
+            'message': response.get('message', 'Could not verify account')
+        }, 400
+
+    except Exception as e:
+        print(f'Verification Error: {e}')
+        return {'message': 'Something went wrong'}, 500

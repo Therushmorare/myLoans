@@ -6,7 +6,11 @@ from loans_project.models.service_provider import ServiceProvider
 from loans_project.models.provider_wallet import ProviderWallet
 from loans_project.models.provider_ledger import ProviderLedger
 from loans_project.models.payout import PayoutRequest
+from loans_project.core.functions.logs import log_user_activity
 
+"""
+Process Payouts
+"""
 
 def process_payout(payout_id, admin_id, status, comments=None):
     try:
@@ -71,6 +75,13 @@ def process_payout(payout_id, admin_id, status, comments=None):
                     amount=payout.amount,
                     description="Payout approved for bank transfer"
                 )
+
+            # Log action
+            log_user_activity(
+                admin_id,
+                "ADMIN",
+                f"Processed Payout: {payout_id}"
+            )
 
             return {
                 'message': f'Payout {status.lower()} successfully',

@@ -2,6 +2,7 @@ import uuid
 from django.db import transaction
 from loans_project.models.admin import AdminUser
 from loans_project.models.loan_packages import LoanPackage
+from loans_project.core.functions.logs import log_user_activity
 
 """
 Add a new service product
@@ -34,6 +35,13 @@ def add_new_service(admin_id, service_name, description, percentage, duration, o
                 amount=offering_amount,
                 status='PENDING'
             )
+
+        # Log action
+        log_user_activity(
+            admin_id,
+            "ADMIN",
+            f"Created a new loan package or product"
+        )
 
         return {
             'message': 'Loan/Credit product added successfully',

@@ -2,6 +2,7 @@ import uuid
 from django.db import transaction
 from loans_project.models.admin import AdminUser
 from loans_project.models.loan_packages import LoanPackage
+from loans_project.core.functions.logs import log_user_activity
 
 """
 Edit service product
@@ -37,6 +38,13 @@ def edit_service_product(admin_id, package_id, service_name=None, description=No
                 package.amount = offering_amount
 
             package.save()
+
+        # Log action
+        log_user_activity(
+            admin_id,
+            "ADMIN",
+            f"Edited service product: {package_id}"
+        )
 
         return {'message': 'Loan package updated successfully'}, 200
 

@@ -4,6 +4,11 @@ from loans_project.models.admin import AdminUser
 from loans_project.models.client import Client
 from loans_project.models.user_manager import *
 from loans_project.models.service_provider import ServiceProvider
+from loans_project.core.functions.logs import log_user_activity
+
+"""
+Delete Users
+"""
 
 def delete_user(admin_id, user_id):
     try:
@@ -22,6 +27,13 @@ def delete_user(admin_id, user_id):
 
         # Delete the user instance
         user.delete()
+
+        # Log action
+        log_user_activity(
+            admin_id,
+            "ADMIN",
+            f"Deleted User: {user_id}"
+        )
 
         return {'message': 'User deleted successfully'}, 200
 

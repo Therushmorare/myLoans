@@ -1,5 +1,6 @@
 from loans_project.models.admin import AdminUser
 from loans_project.models.loan_packages import LoanPackage
+from loans_project.core.functions.logs import log_user_activity
 
 """
 Loan package approval or reject method
@@ -27,6 +28,13 @@ def approve_or_reject_loan_package(admin_id, package_id, status, comments=None):
 
         package.approved_by = admin_id
         package.save()
+
+        # Log action
+        log_user_activity(
+            admin_id,
+            "ADMIN",
+            f"Updated loan package status with the package id: {package_id}"
+        )
 
         return {
             'message': f'Loan package {status.lower()} successfully',

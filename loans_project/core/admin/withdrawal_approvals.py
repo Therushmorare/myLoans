@@ -6,6 +6,7 @@ from loans_project.models.admin import AdminUser
 from loans_project.models.client_wallet import Wallet
 from loans_project.models.withdrawal_requests import Withdrawals
 from loans_project.models.wallet_ledger import WalletLedger
+from loans_project.core.functions.logs import log_user_activity
 
 """
 Admin approves or rejects withdrawals
@@ -79,6 +80,13 @@ def withdrawal_approve_reject(withdrawal_id, admin_id, status, comments):
                     balance_snapshot=None,
                     description="Withdrawal approved for payout"
                 )
+
+            # Log action
+            log_user_activity(
+                admin_id,
+                "ADMIN",
+                f"{status} withdrawal with this ID:{withdrawal_id}"
+            )
 
             return {
                 'message': f'Withdrawal {status.lower()} successfully',

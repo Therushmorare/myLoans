@@ -4,6 +4,7 @@ from loans_project.models.admin import AdminUser
 from loans_project.models.client import Client
 from loans_project.models.user_manager import *
 from loans_project.models.service_provider import ServiceProvider
+from loans_project.core.functions.logs import log_user_activity
 
 """
 Admin manages users
@@ -58,6 +59,13 @@ def manage_users(admin_id, user_id, status, comments=None):
                     comments=comments,
                     created_at=timezone.now()
                 )
+
+        # Log action
+        log_user_activity(
+            admin_id,
+            "ADMIN",
+            f"Updated user status:{user_id}:{status}"
+        )
 
         return {
             'message': f'User {status.lower()} successfully',

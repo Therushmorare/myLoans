@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.http import JsonResponse
 
 from loans_project.models.client import Client
 from loans_project.models.loans import Loan
@@ -11,6 +12,9 @@ from loans_project.models.repayments import Repayment
 from loans_project.core.clients import auth, loan_apply
 from loans_project.core.functions.finance_packages import loan_packages
 from loans_project.core.functions import interest
+from loans_project.core.clients.auth import verify_user_account
+from loans_project.core.functions.verification_checker import check_verifications
+from loans_project.core.clients.edit_profile import edit_profile
 from django.db.models import Sum
 import django_rq #Replace with celery on big apps
 
@@ -21,34 +25,93 @@ def landing_page(request):
     }
     return render(request, "landing_page.html", context=context)
 
-# Dashboard
+#verification
+@login_required(login_url='/login/')
+def verify_page(request):
+    if request.method == "POST":
+        user_id = request.user.id
+        id_number = request.POST.get("id_number")
+
+        if not id_number or len(id_number) != 13 or not id_number.isdigit():
+            messages.error(request, "Please enter a valid 13-digit ID number.")
+            return redirect("verify")
+
+        verified = verify_user_account(user_id, id_number)
+
+        if verified is True:
+            messages.success(request, "Identity verified successfully.")
+            return redirect("dashboard")  # or wherever
+
+        else:
+            messages.error(request, "ID verification failed. Please try again.")
+
+    return render(request, "clients/verify.html")
+
+#dashboard
 @login_required(login_url='/login/')
 def client_dashboard(request):
-    # enqueue background job
+    user = request.user
+
+    response, status_code = check_verifications(user.id)
+    if status_code != 200:
+        return redirect("verify")
+
+    #Enqueue background job safely (avoid duplicates if possible)
     queue = django_rq.get_queue("default")
-    queue.enqueue(interest.interest_checker_job, request.user.id)
+    queue.enqueue(interest.interest_checker_job, user.id)
 
-    # calculate stats
-    total_loans = Loan.objects.filter(user=request.user, status='APPROVED') \
-                              .aggregate(total=Sum('amount'))['total'] or 0
+    total_loans = (
+        Loan.objects
+        .filter(user=user, status='APPROVED')
+        .aggregate(total=Sum('amount'))['total']
+        or 0
+    )
 
-    total_paid = Repayment.objects.filter(user=request.user, status='SUCCESS') \
-                                  .aggregate(total=Sum('amount'))['total'] or 0
+    total_paid = (
+        Repayment.objects
+        .filter(user=user, status='SUCCESS')
+        .aggregate(total=Sum('amount'))['total']
+        or 0
+    )
 
     total_owing = total_loans - total_paid
 
-    interest_payable = Interest.objects.filter(user=request.user) \
-                                       .aggregate(total=Sum('incurred_amount'))['total'] or 0
+    interest_payable = (
+        Interest.objects
+        .filter(user=user)
+        .aggregate(total=Sum('incurred_amount'))['total']
+        or 0
+    )
 
     context = {
-        'user': request.user,
+        'user': user,
         'total_loans': total_loans,
         'total_paid': total_paid,
         'total_owing': total_owing,
         'interest_to_pay': interest_payable
     }
 
-    return render(request, "clients/dashboard.html", context=context)
+    return render(request, "clients/dashboard.html", context)
+
+#profile update
+@login_required(login_url='/login/')
+def profile_update(request):
+    if request.method == "POST":
+        user_id = request.user.id
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+
+        result, status_code = edit_profile(user_id, username, email, phone_number)
+
+        # Return JSON response for AJAX or standard redirect
+        if status_code == 200:
+            return JsonResponse(result, status=200)
+        else:
+            return JsonResponse(result, status=status_code)
+
+    # GET request, render the account page
+    return render(request, "clients/account.html", {'user': request.user})
 
 # My loan applications
 @login_required(login_url='/login/')
