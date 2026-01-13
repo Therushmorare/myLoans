@@ -1,2 +1,1 @@
-11, Make comprehensive user profile
 12, Make CRUD actions for every app activity
